@@ -26,15 +26,63 @@
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                   <ul class="nav navbar-nav">
-                    <li class="<%= typeof page !== 'undefined' && page === 'index' ? 'active' : '' %>"><a href="/">Home</a></li>
+                    <li class="<%= typeof page !== 'undefined' && page === 'landing' ? 'active' : '' %>"><a href="/">Home</a></li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
-                      
+                      <% if(!currentUser){ %>
+                          <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                               Log In<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-login">
+                             <li class="dropdown-login-header">Have an account?</li>
+                             <li>
+                                <form action="/login" method="POST">
+                                   <div class="form-group">
+                                     <input type="email" class="form-control" id="emailId" name="email" placeholder="Email address">
+                                   </div>
+                                   <div class="form-group">
+                                     <input type="password" class="form-control" name="password" id="passwordId" placeholder="Password">
+                                   </div>
+                                   <button type="submit" class="btn btn-primary btn-block btn-round">Log in</button>
+                                 </form>
+                             </li>
+                             <li role="separator" class="divider"></li>
+                             <li class="dropdown-login-header">New to FoodDelivery?</li>
+                             <li>
+                                <button id="btn-link-signUp" class="btn btn-primary btn-block btn-round" onclick="location.href = '/register';">Sign Up</button>
+                             </li>
+                            </ul>
+                          </li>
+                      <% } else { %>
+                          <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                               <%= currentUser.email.substring(0, currentUser.email.lastIndexOf("@"))  %> <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                             <li><a href="#">Settings</a></li>
+                             <li><a href="#">Camps</a></li>
+                             <li role="separator" class="divider"></li>
+                             <li><a href="/logout">Logout</a></li>
+                            </ul>
+                          </li>
+                      <% } %>
                   </ul>
                 </div>
             </div>
         </nav>  
         
-       
+        <div class="container">
+            <% if (success && success.length > 0) { %>
+                <div class="alert alert-success" role="alert">
+                    <%= success %>
+                </div>
+            <% } %>
+            <% if (error && error.length > 0) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= error %>
+                </div>
+            <% } %>
+        </div>
         
         <div class="container">
