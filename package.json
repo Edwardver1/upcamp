@@ -1,0 +1,27 @@
+{
+  "name": "upcamp",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Edwardver1/upcamp.git"
+  },
+  "author": "Edwardver",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Edwardver1/upcamp/issues"
+  },
+  "homepage": "https://github.com/Edwardver1/upcamp#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "connect-flash": "^0.1.1",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "method-override": "^2.3.10",
+    "mongoose": "^4.13.5"
+  }
+}
