@@ -1,6 +1,9 @@
 var express = require("express"),
     router  = express.Router(),
+    middleware = require("../middleware"),
     Campground = require("../models/campground");
+    
+var { isLoggedIn } = middleware; // destructuring assignment
     
 
 router.get("/",function(req,res){
@@ -11,11 +14,11 @@ router.get("/",function(req,res){
     })
 });
 
-router.get("/new",function(req,res){
+router.get("/new", isLoggedIn, function(req,res){
   res.render("campgrounds/new"); 
 });
 
-router.post("/",function(req,res){
+router.post("/", isLoggedIn, function(req,res){
      // get data from form and add to campgrounds array
   var name = req.body.name;
   var image = req.body.image;
@@ -37,8 +40,15 @@ router.post("/",function(req,res){
     
 });
 
-router.get("/:id/show",function(req, res) {
-   res.render("show"); 
+router.get("/:id", isLoggedIn, function(req, res) {
+    Campground.findById(req.params.id,function(err,foundCampground){
+       if(err){
+           req.flash("error", "Sorry, campground doesn't exist");
+           res.redirect("/");
+       } else {
+           res.render("campgrounds/show", {campground: foundCampground});    
+       }
+    });
 });
 
 

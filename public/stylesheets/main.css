@@ -34,6 +34,10 @@ body {
     padding: 9px;
 }
 
+.campground-center {
+    width: 80%;
+    margin: 0 auto; 
+}
 
 /* Login form */
 .form-center{

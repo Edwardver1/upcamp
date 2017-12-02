@@ -1,0 +1,24 @@
+<% include ../partials/header %> 
+
+<div class="row">
+    <div class="campground-center">
+        <div class="thumbnail">
+          <img class="img-responsive" src="<%= campground.image %>">
+          <div class="caption-full">
+            <h4 class="pull-right">
+              $<%= campground.cost %>/night
+            </h4>
+            <h4><a><%=campground.name%></a></h4>
+            <p><%= campground.description %></p>
+            <p>
+              <em>Submitted by: <%= campground.author.username %>, <%= campground.createdAt %></em>
+            </p>
+            
+          </div>
+        </div>
+    </div>
+</div>
+
+
+
+<% include ../partials/footer %> 
