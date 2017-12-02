@@ -34,11 +34,6 @@ body {
     padding: 9px;
 }
 
-.campground-center {
-    width: 80%;
-    margin: 0 auto; 
-}
-
 /* Login form */
 .form-center{
     width:30%;
@@ -67,3 +62,16 @@ body {
 }
 
 
+/* Campground show */
+.campground-center {
+    width: 80%;
+    margin: 0 auto; 
+}
+
+.align-right{
+    text-align: right;
+}
+
+.delete-form {
+	display: inline-block;
+}

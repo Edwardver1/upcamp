@@ -38,7 +38,11 @@ passport.use(new FacebookStrategy({
                         if (!err && foundUser){
                             return done(err);
                         }
-                        user = new User({email: profile.emails[0].value});
+                        user = new User({
+                            email: profile.emails[0].value, 
+                            username: profile.emails[0].value.substring(0, profile.emails[0].value.lastIndexOf("@"))
+                            
+                        });
                         var password = crypto.randomBytes(4).toString('hex');
                         User.register(user,password, function(err,newUser) {
                         if (err) throw err;

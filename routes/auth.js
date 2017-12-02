@@ -15,7 +15,10 @@ router.get("/register", function(req,res){
 });
 
 router.post("/register",function(req,res){
-    var user = new User({email: req.body.email});
+    var user = new User({
+      email: req.body.email, 
+      username: req.body.email.substring(0, req.body.email.lastIndexOf("@")) 
+    });
     User.register(user,req.body.password,function(err,newUser){
       if(err){
           req.flash("error", err.message);
@@ -36,10 +39,10 @@ router.post("/register",function(req,res){
     sgMail.send(msg, function(err){
         if(err){
             req.flash("error", "Error, sending you e-mail.");
-            return res.redirect("/");
+            return res.redirect("/campgrounds");
         } else{
             req.flash("success", "Email verification sent!");
-            res.redirect("/");
+            res.redirect("/campgrounds");
         }
     });
    
@@ -51,10 +54,10 @@ router.get("/verify", function(req, res) {
   User.verifyEmail(req.query.authToken, function(err, existingAuthToken) {
     if(err){
       req.flash("error","Oops, can't verify your email.");
-      res.redirect("/");
+      res.redirect("/campgrounds");
     } 
     req.flash("success", "Email verified successfully");
-    res.redirect("/");
+    res.redirect("/campgrounds");
   });
 });
 
@@ -63,10 +66,10 @@ router.get('/login/facebook', passport.authenticate('facebook', { scope : ['emai
 
 router.get('/login/facebook/callback',
 	passport.authenticate('facebook', {
-		successRedirect : '/',
+		successRedirect : '/campgrounds',
 		failureRedirect : '/register',
 		failureFlash: "User already exists with such email",
-        successFlash: "Email verification sent!"
+    successFlash: "Email verification sent!"
 	}));
 
 
@@ -78,7 +81,7 @@ router.get("/login",function(req, res) {
 
 router.post("/login",passport.authenticate("local",
     {
-        successRedirect: "/",
+        successRedirect: "/campgrounds",
         failureRedirect: "/login",
         failureFlash: true,
         successFlash: true
@@ -91,7 +94,7 @@ router.post("/login",passport.authenticate("local",
 router.get("/logout",function(req,res){
     req.flash("success", "You are logged out.");
     req.logout();
-    res.redirect("/");
+    res.redirect("/campgrounds");
 });
 
 //Forgot password
@@ -219,7 +222,7 @@ router.post("/reset/:token", function(req, res) {
       req.flash("error", err.message);
       return res.redirect("/forgot");
     }
-    res.redirect("/");
+    res.redirect("/campgrounds");
   });
 });
 
