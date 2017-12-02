@@ -3,7 +3,7 @@ var express = require("express"),
     middleware = require("../middleware"),
     Campground = require("../models/campground");
     
-var { isLoggedIn } = middleware; // destructuring assignment
+var { isLoggedIn, checkUserCampground } = middleware; // destructuring assignment
     
 //INDEX
 router.get("/",function(req,res){
@@ -51,7 +51,7 @@ router.get("/:id", isLoggedIn, function(req, res) {
 });
 
 //EDIT FORM
-router.get("/:id/edit", isLoggedIn, function(req,res){
+router.get("/:id/edit", isLoggedIn, checkUserCampground, function(req,res){
    Campground.findById(req.params.id,function(err,foundCampground){
        if ( err || !foundCampground){
            req.flash("error", "Sorry, campground doesn't exist");
@@ -63,7 +63,7 @@ router.get("/:id/edit", isLoggedIn, function(req,res){
 });
 
 //UPDATE 
-router.put("/:id", isLoggedIn, function(req,res){
+router.put("/:id", isLoggedIn, checkUserCampground, function(req,res){
    var newData = {name: req.body.name, image: req.body.image, description: req.body.description, cost: req.body.cost, createdAt: Date.now()};
    Campground.findByIdAndUpdate(req.params.id, {$set: newData}, function(err,updatedCampground){
        if(err){
@@ -76,7 +76,7 @@ router.put("/:id", isLoggedIn, function(req,res){
 });
 
 //DELETE
-router.delete("/:id", isLoggedIn, function(req,res){
+router.delete("/:id", isLoggedIn, checkUserCampground,  function(req,res){
     Campground.findByIdAndRemove(req.params.id,function(err){
         if(err){
             req.flash('error', err.message);
