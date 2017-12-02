@@ -57,7 +57,7 @@
                       <% } else { %>
                           <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                               <%= currentUser.email.substring(0, currentUser.email.lastIndexOf("@"))  %> <span class="caret"></span>
+                               <%= currentUser.username || currentUser.email.substring(0, currentUser.email.lastIndexOf("@"))  %> <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                              <li><a href="#">Settings</a></li>

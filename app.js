@@ -13,6 +13,7 @@ var express        = require("express"),
 
 var indexRoutes = require("./routes/index");
 var authRoutes = require("./routes/auth");
+var campgroundRoutes = require("./routes/campgrounds");
 
 mongoose.connect("mongodb://localhost/upCamp",{useMongoClient: true});
 mongoose.Promise = global.Promise;
@@ -45,6 +46,7 @@ app.use(function(req,res,next){
 
 app.use("/",indexRoutes);
 app.use("/",authRoutes);
+app.use("/campgrounds", campgroundRoutes);
 
 
 

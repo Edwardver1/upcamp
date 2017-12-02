@@ -5,6 +5,7 @@ var mongoose                   = require("mongoose"),
 var User = new mongoose.Schema({
    
   email: {type:String, unique: true, required: true},
+  username: {type:String, unique: true},
   password: String,
   authToken: String,
   isAuthenticated: {type:Boolean, default: false },
