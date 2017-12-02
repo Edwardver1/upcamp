@@ -34,6 +34,12 @@ body {
     padding: 9px;
 }
 
+/* Index container */
+.flex-wrap {
+  display:flex;
+  flex-wrap: wrap;
+}
+
 /* Login form */
 .form-center{
     width:30%;
