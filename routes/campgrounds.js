@@ -45,12 +45,14 @@ router.get("/new", isLoggedIn, function(req,res){
 router.post("/", isLoggedIn, upload.single('image'), function(req,res){
   cloudinary.uploader.upload(req.file.path, function(result) {
       // add cloudinary url for the image to the campground object under image property
+    
       req.body.campground.image = result.secure_url;
       // add author to campground
       req.body.campground.author = {
         id: req.user._id,
         username: req.user.username
       };
+      req.body.campground.description = req.sanitize(req.body.campground.description);
       Campground.create(req.body.campground, function(err, campground) {
         if (err) {
           req.flash('error', err.message);
@@ -62,14 +64,16 @@ router.post("/", isLoggedIn, upload.single('image'), function(req,res){
 });
 
 //SHOW
-router.get("/:id", isLoggedIn, function(req, res) {
-    Campground.findById(req.params.id,function(err,foundCampground){
-       if(err || !foundCampground){
-           req.flash("error", "Sorry, campground doesn't exist");
-           res.redirect("/campgrounds");
-       } else {
-           res.render("campgrounds/show", {campground: foundCampground});    
-       }
+router.get("/:id", function(req, res) {
+    //find the campground with provided ID
+    Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
+        if(err || !foundCampground){
+            
+            req.flash('error', 'Sorry, that campground does not exist!');
+            return res.redirect('/campgrounds');
+        }
+        //render show template with that campground
+        res.render("campgrounds/show", {campground: foundCampground});
     });
 });
 
@@ -91,6 +95,7 @@ router.put("/:id", isLoggedIn, checkUserCampground, upload.single('image'),  fun
       cloudinary.uploader.upload(req.file.path, function(result) {
           // add cloudinary url for the image to the campground object under image property
           req.body.campground.image = result.secure_url;
+          req.body.campground.description = req.sanitize(req.body.campground.description);
           Campground.findByIdAndUpdate(req.params.id, {$set: req.body.campground}, function(err,updatedCampground){
               if(err){
                   req.flash("error", err.message);
@@ -102,6 +107,7 @@ router.put("/:id", isLoggedIn, checkUserCampground, upload.single('image'),  fun
           });
         });  
     } else {
+        req.body.campground.description = req.sanitize(req.body.campground.description);
         Campground.findByIdAndUpdate(req.params.id, {$set: req.body.campground}, function(err,updatedCampground){
           if(err){
               req.flash("error", err.message);
