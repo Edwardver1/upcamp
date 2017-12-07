@@ -31,7 +31,11 @@ cloudinary.config({
 router.get("/",function(req,res){
     Campground.find({},function(err,allCampgrounds){
         if(!err || allCampgrounds){
-            res.render("campgrounds/index" , {allCampgrounds: allCampgrounds, page: "index"});      
+            if(req.xhr){
+                res.json(allCampgrounds);
+            } else{
+                res.render("campgrounds/index" , {allCampgrounds: allCampgrounds, page: "index"});         
+            }
         }
     })
 });
@@ -68,11 +72,10 @@ router.get("/:id", function(req, res) {
     //find the campground with provided ID
     Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
         if(err || !foundCampground){
-            
             req.flash('error', 'Sorry, that campground does not exist!');
             return res.redirect('/campgrounds');
         }
-        //render show template with that campground
+
         res.render("campgrounds/show", {campground: foundCampground});
     });
 });
