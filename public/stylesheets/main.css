@@ -34,6 +34,12 @@ body {
     padding: 9px;
 }
 
+/* Google Map styles */
+#map {
+	height: 400px;
+	width: 100%;
+}
+
 /* Index container */
 .flex-wrap {
   display:flex;
