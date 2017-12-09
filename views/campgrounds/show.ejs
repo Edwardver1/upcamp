@@ -22,28 +22,27 @@
           </div>
         </div>
         <div class="well">
+          <% if (currentUser) { %>
           <div class="comment-form">
-            <a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new">Add New Comment</a>
-            <p id="camp_id" ><%= campground._id %></p>
             <form action="/campgrounds/<%= campground._id %>/comments" method="POST" id="new-comment-form">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="comment[text]" placeholder="text">
+                    <input class="form-control" type="text" name="comment[text]" placeholder="Leave a comment...">
                 </div>
-                <div class="form-group">
-                    <button class="btn btn-lg btn-primary btn-block">Submit!</button>
+                <div class="hidden form-group">
+                    <button class="btn btn-md btn-primary">Post</button>
                 </div>
             </form>
           </div>
           <hr>
+          <% } %>
           <div id="comments-list">
           <% campground.comments.forEach(function(comment){ %>
           <div class="row">
             <div class="col-md-12">
               <strong><%= comment.author.username %></strong>
               <span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
-              
               <div>
-               <span id="comment-<%=comment._id %>-text"><%= comment.text %> </span>
+               <span class="comment-text"><%= comment.text %> </span>
                <form class="edit-item-form" action="/campgrounds/<%= campground._id %>/comments/<%=comment._id %>" method="POST" >
                   <div class="form-group">
                       <input class="form-control" type="text" value="<%=comment.text %>"  name="comment[text]">

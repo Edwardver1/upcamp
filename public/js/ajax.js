@@ -1,6 +1,11 @@
 'use strict';
 
 // Create Comment
+
+$('#new-comment-form').click(function(){
+	$('.form-group:nth-child(2)').removeClass('hidden');	
+});
+
 $('#new-comment-form').submit(function (e) {
 	e.preventDefault();
 
@@ -11,12 +16,15 @@ $('#new-comment-form').submit(function (e) {
 		var comment = createComment(data);
 		$row.append(comment);
 		$('#comments-list').append($row);
+		$('#new-comment-form').find('.form-control').val('');
 	});
 });
 
 // Update comment
 $('#comments-list').on('click', '.edit-button', function () {
 	$(this).parent().siblings('.edit-item-form').toggle();
+	$(this).parent().siblings('.comment-text').toggleClass("hidden");
+	$(this).parent().toggleClass("move-update-button");
 	$(this).toggleText('EDIT', 'CANCEL');
 });
 
@@ -70,14 +78,14 @@ function createComment(data){
 	var $strong = $('<strong>', {text: data.author.username});
     var $time = $('<span>',{class: 'pull-right', text: moment(data.createdAt).fromNow()})
 	var $divText = $('<div>');
-	var $comText = $('<span>', {id: 'comment-'+ data._id + '-text', text: data.text});
+	var $comText = $('<span>', {class: 'comment-text', text: data.text});
 	var $updateForm = $('<form>',{class: 'edit-item-form', action: '/campgrounds/' + getID() + '/comments/' + data._id, method: 'POST'});
 	var $divFormGroup1 = $('<div>', {class: 'form-group'});
 	var $divFormGroup2 = $('<div>', {class: 'form-group'});
 	var $inputUpdate = $('<input>',{class: 'form-control', type: 'text', value: data.text, name: 'comment[text]'});
 	var $submitButton = $('<button>',{class: 'btn btn-xs btn-primary', text: 'Submit'});
 	var $divButtons = $('<div>',{class: 'pull-right'});
-	var $a = $('<button>',{style: 'margin-right: 5px', class: 'btn btn-xs btn-warning', text: 'EDIT'});
+	var $updateButton = $('<button>',{style: 'margin-right: 5px', class: 'btn btn-xs btn-warning edit-button', text: 'EDIT'});
 	var $form = $('<form>', {class: 'delete-form', action: '/campgrounds/' + getID() + '/comments/' + data._id + '?_method=DELETE', method: 'POST'});
 	var $delButton = $('<button>', {class: 'btn btn-xs btn-danger', text: 'DELETE'});
 	var $hr = $('<hr>');
@@ -88,7 +96,7 @@ function createComment(data){
 	$updateForm.append($divFormGroup2);
 	
 	$form.append($delButton);
-	$divButtons.append($a);
+	$divButtons.append($updateButton);
 	$divButtons.append($form);
 	
 	$divText.append($comText);

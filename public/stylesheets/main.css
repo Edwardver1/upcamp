@@ -88,3 +88,12 @@ body {
 .cancel-button {
 	display: none;
 }
+
+.move-update-button {
+    margin-top: -4%;
+}
+
+/* Remove buttons outline */
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0 none;
+}
