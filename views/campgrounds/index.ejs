@@ -6,11 +6,18 @@
              <p>View our hand-picked campgrounds from all over the world</p>
              <p>
                 <a class="btn btn-primary btn-lg" href="/campgrounds/new">Add New Campground</a>
+              <!--  <p>-->
+              <!--      <form action="/campgrounds" method="GET" class="form-inline" id="campground-search">-->
+              <!--  <div class="form-group">-->
+              <!--    <input type="text" name="search" placeholder="Campground search..." class="form-control">-->
+              <!--  </div>-->
+              <!--</form>-->
+              <!--  </p>-->
              </p>
          </div>
      </header>
      
-     <div class="row text-center flex-wrap">
+     <div class="row text-center flex-wrap" id="campground-grid">
         <% allCampgrounds.forEach(function(campground){ %>
             <div class="col-md-3 col-sm-6">
                 <div class="thumbnail">
@@ -25,5 +32,6 @@
             </div>
        <% }); %>
     </div>
+
 
 <% include ../partials/footer %>

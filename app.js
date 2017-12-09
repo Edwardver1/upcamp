@@ -41,9 +41,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 passport.use(User.createStrategy());
 
-
+var page ;
 app.use(function(req,res,next){
     res.locals.currentUser = req.user;
+    res.locals.page = page;
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
     app.locals.moment = require('moment');

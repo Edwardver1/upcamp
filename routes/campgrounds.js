@@ -27,9 +27,24 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY, 
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
+
+// Define escapeRegex function for search feature
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
     
 //INDEX
 router.get("/",function(req,res){
+    if(req.query.search && req.xhr) {
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        Campground.find({ name : regex }, function(err, allCampgrounds){
+          if(err){
+            console.log(err);
+          } else {
+            res.status(200).json(allCampgrounds);
+          }
+        });
+    } else {
     Campground.find({},function(err,allCampgrounds){
         if(!err || allCampgrounds){
             if(req.xhr){
@@ -39,7 +54,9 @@ router.get("/",function(req,res){
             }
         }
     })
+    }
 });
+
 
 //NEW FORM
 router.get("/new", isLoggedIn, function(req,res){
