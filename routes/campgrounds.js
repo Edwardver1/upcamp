@@ -5,7 +5,7 @@ var express = require("express"),
     multer = require('multer'),
     geocoder = require('geocoder');
     
-var { isLoggedIn, checkUserCampground } = middleware; // destructuring assignment
+var { isLoggedIn, checkUserCampground, isAdmin } = middleware; // destructuring assignment
 
 //Image upload conf
 var storage = multer.diskStorage({

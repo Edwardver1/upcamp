@@ -10,13 +10,14 @@ $('#new-comment-form').submit(function (e) {
 	e.preventDefault();
 
 	var comment = $(this).serialize();
-
 	$.post('/campgrounds/' + getID() + '/comments', comment, function (data) {
-		var $row = $('<div>',{class: "row"});
-		var comment = createComment(data);
-		$row.append(comment);
-		$('#comments-list').append($row);
-		$('#new-comment-form').find('.form-control').val('');
+		if(data.text > 0){
+			var $row = $('<div>',{class: "row"});
+			var comment = createComment(data);
+			$row.append(comment);
+			$('#comments-list').append($row);
+			$('#new-comment-form').find('.form-control').val('');
+		}
 	});
 });
 

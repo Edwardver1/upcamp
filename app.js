@@ -9,7 +9,8 @@ var express        = require("express"),
     flash          = require("connect-flash"),
     passport       = require("passport"),
     methodOverride = require("method-override"),
-    User           = require("./models/user");
+    User           = require("./models/user"),
+    seedDB      = require("./seeds");
     
 
 var indexRoutes = require("./routes/index"),
@@ -28,6 +29,8 @@ app.set("view engine","ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
+app.locals.moment = require('moment');
+seedDB();
 
 
 
@@ -47,7 +50,6 @@ app.use(function(req,res,next){
     res.locals.page = page;
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
-    app.locals.moment = require('moment');
     next();
 });
 

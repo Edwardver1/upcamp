@@ -13,7 +13,7 @@ module.exports = {
           console.log(err);
           req.flash('error', 'Sorry, that campground does not exist!');
           res.redirect('/campgrounds');
-      } else if(foundCampground.author.id.equals(req.user._id)){
+      } else if(foundCampground.author.id.equals(req.user._id) || req.user.isAdmin){
           req.campground = foundCampground;
           next();
       } else {
@@ -21,5 +21,13 @@ module.exports = {
           res.redirect('/campgrounds/' + req.params.id);
       }
     });
+  },
+  isAdmin: function(req,res,next){
+    if(req.user.isAdmin){
+      next()
+    } else {
+      req.flash('error', 'You don\'t have permissions to do that');
+      res.redirect('back');
+    }
   }
 }

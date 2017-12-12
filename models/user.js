@@ -8,9 +8,10 @@ var User = new mongoose.Schema({
   username: {type:String, unique: true},
   password: String,
   authToken: String,
-  isAuthenticated: {type:Boolean, default: false },
+  isAuthenticated: {type:Boolean, default: false},
   resetPasswordToken: String,
-  resetPasswordExpires: Date
+  resetPasswordExpires: Date,
+  isAdmin: {type: Boolean, default: false}
    
 });
 
