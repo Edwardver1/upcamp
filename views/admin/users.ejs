@@ -12,35 +12,34 @@
     <tbody id="users-list">
         <% allUsers.forEach(function(user){ %>
           <% if (!user.isAdmin) { %>
-              
            <tr>
             <td class="user-text username"><%= user.username %></td>
             <td class="user-text email"><%= user.email %></td>
             <td class="user-text isAuthenticated"><%= user.isAuthenticated %></td>
-            <form class="edit-user-form" action="/admin/user/<%= user._id %>" method="POST">
+            <form class="edit-user-form" action="/admin/users/<%= user._id %>" method="POST">
                <td class="edit-td">
-                  <input class="form-control" type="text" value="<%=user.username %>"  name="user[username]">
+                  <input class="form-control input-username" type="text" value="<%=user.username %>"  name="user[username]">
                </td>
                <td class="edit-td">
-                  <input class="form-control" type="text" value="<%=user.email %>"  name="user[email]">
+                  <input class="form-control input-email" type="text" value="<%=user.email %>"  name="user[email]">
                </td>
                <td class="edit-td">
-                  <select class="form-control" name="user[isAuthenticated]">
+                  <select class="form-control input-auth" name="user[isAuthenticated]">
                       <option value='true'>True</option>
                       <option value='false'>False</option>
                   </select>
                </td>
-                   <button class="btn btn-xs btn-primary hidden">Submit!</button>
+                
             </form>
-            <td>
+            <td class="td-buttons">
                 <button class="btn btn-xs btn-primary submit-update-form">UPDATE</button>
                 <button class="btn btn-xs btn-warning edit-user-button">EDIT</button>
-                <form class="delete-form" action="/admin/user/<%= user._id %>" method="POST">
+                <form class="delete-form" action="/admin/users/<%= user._id %>" method="POST">
                   <button class="btn btn-xs btn-danger">DELETE</button>
                 </form>
             </td>
           </tr>
-          <% } %>
+         <% } %>
         <% }) %>
     </tbody>
 </table>

@@ -27,6 +27,9 @@
                 <div id="navbar" class="collapse navbar-collapse">
                   <ul class="nav navbar-nav">
                     <li><a href="/">Home</a></li>
+                    <% if (currentUser && currentUser.isAdmin) { %>
+                    <li><a href="/admin/users">Users</a></li>
+                    <% } %>
                     <% if ( page !== 'undefined' && page === 'index') { %>
                     <form action="/campgrounds" method="GET" class="navbar-form navbar-left"  id="campground-search">
                         <div class="form-group">
@@ -34,9 +37,14 @@
                         </div>
                     </form>
                     <% } %>
-                    <% if (currentUser && currentUser.isAdmin) { %>
-                    <li><a href="/admin/user">Users</a></li>
+                    <% if ( page !== 'undefined' && page === 'users') { %>
+                    <form action="/admin/users" method="GET" class="navbar-form navbar-left"  id="user-search">
+                        <div class="form-group">
+                          <input type="text" class="form-control" name="search" placeholder="Username">
+                        </div>
+                    </form>
                     <% } %>
+                   
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                       <% if(!currentUser){ %>

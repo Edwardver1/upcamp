@@ -7,20 +7,32 @@ $('#users-list').on('click', '.edit-user-button', function () {
 });
 
 $('#users-list').on('click', '.submit-update-form', function () {
-	$(this).siblings('.edit-user-button').trigger('click');
 	$(this).parent().siblings('.edit-user-form').trigger('submit');
 	
 });
 
+$('#users-list').on('keypress', 'input', function (e) {
+	 if (e.which == 13) {
+        e.preventDefault();
+				$(this).parent().siblings('.edit-user-form').trigger('submit');
+    }
+});
+
 $('#users-list').on('submit', '.edit-user-form', function (e) {
 	e.preventDefault();
-	var userItem = $(this).serialize();
+	// var userItem = $(this).serialize();
 	var actionUrl = $(this).attr('action');
 	var $originalItem = $(this).closest('tr');
 	var $updateBtn = $(this).siblings('.td-buttons').find('.edit-user-button');
+	//TO-DO: serialize() form on search
+	var username = $(this).parent().find('.input-username').val();
+	var email = $(this).parent().find('.input-email').val();
+	var emailName = email.substring(0, email.lastIndexOf("@"));
+	var auth = $(this).parent().find('.input-auth').val();
+	var str = 'user%5Busername%5D='+username+'&user%5Bemail%5D='+emailName+'%40gmail.com&user%5BisAuthenticated%5D='+auth;
 	$.ajax({
 		url: actionUrl,
-		data: userItem,
+		data: str,
 		type: 'PUT',
 		originalItem: $originalItem,
 		updateBtn: $updateBtn,
@@ -54,4 +66,47 @@ $('#users-list').on('submit', '.delete-form', function (e) {
 	}
 });
 
+// Search user
+$('#user-search').on('input', function() {
+  var search = $(this).serialize();
+  if(search === "username=") {
+    search = "all"
+  }
+  $.get('/admin/users?' + search, function(data) {
+    $('#users-list').html('');
+    data.forEach(function(user) {
+    	if(!user.isAdmin){
+    		$('#users-list').append(`
+        <tr>
+            <td class="user-text username">${ user.username }</td>
+            <td class="user-text email">${ user.email }</td>
+            <td class="user-text isAuthenticated">${ user.isAuthenticated }</td>
+            <form class="edit-user-form" action="/admin/users/${ user._id }" method="POST">
+              <td class="edit-td">
+                  <input class="form-control input-username" type="text" value="${ user.username }"  name="user[username]">
+              </td>
+              <td class="edit-td">
+                  <input class="form-control input-email" type="text" value="${ user.email }"  name="user[email]">
+              </td>
+              <td class="edit-td">
+                  <select class="form-control input-auth" name="user[isAuthenticated]">
+                      <option value='true'>True</option>
+                      <option value='false'>False</option>
+                  </select>
+              </td>
+                
+            </form>
+            <td class="td-buttons">
+                <button class="btn btn-xs btn-primary submit-update-form">UPDATE</button>
+                <button class="btn btn-xs btn-warning edit-user-button">EDIT</button>
+                <form class="delete-form" action="/admin/users/${ user._id }" method="POST">
+                  <button class="btn btn-xs btn-danger">DELETE</button>
+                </form>
+            </td>
+          </tr>
+      `	);
+    	};
+    });
+  });
+});
 

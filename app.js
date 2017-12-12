@@ -56,7 +56,7 @@ app.use("/",indexRoutes);
 app.use("/",authRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
-app.use("/admin/user", userRoutes);
+app.use("/admin/users", userRoutes);
 
 
 
