@@ -11,7 +11,7 @@ $('#new-comment-form').submit(function (e) {
 
 	var comment = $(this).serialize();
 	$.post('/campgrounds/' + getID() + '/comments', comment, function (data) {
-		if(data.text > 0){
+		if(data.text){
 			var $row = $('<div>',{class: "row"});
 			var comment = createComment(data);
 			$row.append(comment);

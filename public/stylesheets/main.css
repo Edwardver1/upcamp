@@ -87,7 +87,7 @@ body {
 .delete-form {
 	display: inline-block;
 }
-/* Hide to do item edit forms on page load */
+/* Hide comment edit forms on page load */
 .edit-item-form {
 	display: none;
 }
@@ -102,4 +102,13 @@ body {
 /* Remove buttons outline */
 .btn:focus, .btn:active:focus, .btn.active:focus {
     outline: 0 none;
+}
+
+/* Users table */
+.edit-td {
+	display: none ;
+}
+
+.submit-update-form{
+    display: none;
 }

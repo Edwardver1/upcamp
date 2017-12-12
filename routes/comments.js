@@ -37,8 +37,6 @@ router.post("/", isLoggedIn, function(req, res){
                comment.save();
                campground.comments.push(comment);
                campground.save();
-            //   req.flash('success', 'Created a comment!');
-            //   res.redirect('/campgrounds/' + campground._id);
                res.json(comment);
            }
         });
@@ -57,12 +55,12 @@ router.put("/:commentId",  function(req, res){
           console.log(err);
            res.render("edit");
        } else {
-        //   res.redirect("/campgrounds/" + req.params.id);
              res.json(comment);
        }
    }); 
 });
 
+//DELETE
 router.delete("/:commentId", function(req,res){
     Comment.findByIdAndRemove(req.params.commentId, function(err,comment){
         if(err){

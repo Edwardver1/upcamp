@@ -26,13 +26,16 @@
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                   <ul class="nav navbar-nav">
-                    <li class="<%= typeof page !== 'undefined' && page === 'landing' ? 'active' : '' %>"><a href="/">Home</a></li>
+                    <li><a href="/">Home</a></li>
                     <% if ( page !== 'undefined' && page === 'index') { %>
                     <form action="/campgrounds" method="GET" class="navbar-form navbar-left"  id="campground-search">
                         <div class="form-group">
                           <input type="text" class="form-control" name="search" placeholder="Search">
                         </div>
                     </form>
+                    <% } %>
+                    <% if (currentUser && currentUser.isAdmin) { %>
+                    <li><a href="/admin/user">Users</a></li>
                     <% } %>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">

@@ -16,7 +16,8 @@ var express        = require("express"),
 var indexRoutes = require("./routes/index"),
     authRoutes = require("./routes/auth"),
     campgroundRoutes = require("./routes/campgrounds"),
-    commentRoutes    = require("./routes/comments");
+    commentRoutes    = require("./routes/comments"),
+    userRoutes    = require("./routes/user");
 
 mongoose.connect("mongodb://localhost/upCamp",{useMongoClient: true});
 mongoose.Promise = global.Promise;
@@ -30,9 +31,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
 app.locals.moment = require('moment');
-seedDB();
-
-
+// seedDB();
 
 //Auth config
 app.use(require("express-session")({
@@ -57,6 +56,7 @@ app.use("/",indexRoutes);
 app.use("/",authRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
+app.use("/admin/user", userRoutes);
 
 
 
