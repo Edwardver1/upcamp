@@ -1,25 +1,26 @@
 require('dotenv').config();
 
-var express        = require("express"),
-    app            = express(),
-    port           = process.env.PORT || 3000,
+var express          = require("express"),
+    app              = express(),
+    port             = process.env.PORT || 3000,
+    dburl            = process.env.DATABASEURL || "mongodb://localhost/upCamp",
     expressSanitized = require("express-sanitizer"),
-    bodyParser     = require("body-parser"),
-    mongoose       = require("mongoose"),
-    flash          = require("connect-flash"),
-    passport       = require("passport"),
-    methodOverride = require("method-override"),
-    User           = require("./models/user"),
-    seedDB      = require("./seeds");
+    bodyParser       = require("body-parser"),
+    mongoose         = require("mongoose"),
+    flash            = require("connect-flash"),
+    passport         = require("passport"),
+    methodOverride   = require("method-override"),
+    User             = require("./models/user"),
+    seedDB           = require("./seeds");
     
 
-var indexRoutes = require("./routes/index"),
-    authRoutes = require("./routes/auth"),
+var indexRoutes      = require("./routes/index"),
+    authRoutes       = require("./routes/auth"),
     campgroundRoutes = require("./routes/campgrounds"),
     commentRoutes    = require("./routes/comments"),
-    userRoutes    = require("./routes/user");
+    userRoutes       = require("./routes/user");
 
-mongoose.connect("mongodb://localhost/upCamp",{useMongoClient: true});
+mongoose.connect(dburl,{useMongoClient: true});
 mongoose.Promise = global.Promise;
 require("./config/passport");
 
@@ -31,7 +32,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
 app.locals.moment = require('moment');
-// seedDB();
+seedDB();
 
 //Auth config
 app.use(require("express-session")({
@@ -60,5 +61,5 @@ app.use("/admin/users", userRoutes);
 
 
 
-app.listen(port, () => { console.log("Server started... ")
+app.listen(port,process.env.ID, () => { console.log("Server started... ")
 });
