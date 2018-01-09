@@ -28,8 +28,9 @@ $('#users-list').on('submit', '.edit-user-form', function (e) {
 	var username = $(this).parent().find('.input-username').val();
 	var email = $(this).parent().find('.input-email').val();
 	var emailName = email.substring(0, email.lastIndexOf("@"));
+	var emailDomain = email.substring(email.lastIndexOf("@")+1, email.length);
 	var auth = $(this).parent().find('.input-auth').val();
-	var str = 'user%5Busername%5D='+username+'&user%5Bemail%5D='+emailName+'%40gmail.com&user%5BisAuthenticated%5D='+auth;
+	var str = 'user%5Busername%5D='+username+'&user%5Bemail%5D='+emailName+'%40'+emailDomain+'&user%5BisAuthenticated%5D='+auth;
 	$.ajax({
 		url: actionUrl,
 		data: str,
