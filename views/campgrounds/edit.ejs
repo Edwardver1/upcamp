@@ -20,9 +20,36 @@
                     <label for="description">Description</label>
                     <textarea class="form-control" rows="6" type="text" name="campground[description]" id="description" ><%= campground.description %></textarea>
                 </div>
-                 <div class="form-group">
+                <div class="form-group">
                     <label for="image">Image</label>
-                    <input type="file" id="image" name="image" accept="image/*">
+                    <input type="file" id="image" name="images" accept="image/*" multiple>
+                </div>
+                 <div class="form-group">
+                     <div class="col-md-5 col-sm-5">
+                         <div class="thumbnail image-container logo">
+                             <img class="img-inLine" src="<%= campground.images[0] %>">
+                             <a class="removeIcon hidden" href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+                             <input class="hidden" type="text" name="urls" value="<%= campground.images[0] %>">
+                             <div class="caption">
+                                 <a class="logo-btn hidden" href="#">Make Logo</a>
+                                 <span class="logo-text">Logo</span>
+                             </div>
+                         </div>
+                     </div>
+                    <% for (var i = 1; i < campground.images.length; i++) { %>
+                     <div class="col-md-5 col-sm-5">
+                         <div class="thumbnail image-container">
+                             <img class="img-inLine" src="<%= campground.images[i] %>">
+                             <a class="removeIcon" href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
+                             <input class="hidden" type="text" name="urls" value="<%= campground.images[i] %>">
+                             <div class="caption">
+                                 <a class="logo-btn" href="#">Make Logo</a>
+                                 <span class="logo-text hidden">Logo</span>
+                             </div>
+                         </div>
+                     </div>
+                        
+                    <% } %>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-lg btn-primary btn-block">Submit!</button>

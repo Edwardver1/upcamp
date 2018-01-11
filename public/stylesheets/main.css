@@ -75,6 +75,7 @@ body {
 
 
 /* Campground show */
+
 .campground-center {
     width: 80%;
     margin: 0 auto; 
@@ -87,7 +88,18 @@ body {
 .delete-form {
 	display: inline-block;
 }
+
+.carousel-inner > .item > img {
+  width:100%;
+  height:550px;
+}
+
+.carousel-control {
+    width: 7%;
+}
+
 /* Hide comment edit forms on page load */
+
 .edit-item-form {
 	display: none;
 }
@@ -111,4 +123,59 @@ body {
 
 .submit-update-form{
     display: none;
+}
+
+/* Edit camp */
+
+/*.img-edit{*/
+/*    width: 200px;*/
+/*    height: auto;*/
+/*}*/
+
+.removeIcon {
+    position: absolute;
+    top: -2%;
+    left: 80%;
+    display: none;
+    color: black;
+}
+
+.logo{
+  background-color: #0f0f2d;
+  
+}
+.logo img{
+  opacity: 0.5;
+}
+.logo-text{
+    position: absolute;
+    top: 70%;
+    left: 37%;
+    display: block;
+    color: white;
+}
+
+.logo-btn {
+    position: absolute;
+    top: 70%;
+    left: 26%;
+    display: none;
+    color: black;
+}
+
+.logo-btn:hover {
+     text-decoration: none;
+}
+
+.image-container:hover .removeIcon  {
+    display: block;
+}
+
+.image-container:hover .logo-btn  {
+    display: block;
+}
+
+.img-inLine {
+    height: 100px !important;
+    width: auto !important;
 }
