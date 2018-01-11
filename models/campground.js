@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 var campgroundSchema = new mongoose.Schema({
    name: String,
-   image: String,
+   images: [String],
    description: String,
    location: String,
    lat: String,
