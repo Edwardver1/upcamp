@@ -2,8 +2,6 @@ var express = require("express"),
     router  = express.Router(),
     middleware = require("../middleware"),
     Campground = require("../models/campground"),
-    Promise = require('bluebird'),
-    multer = require('multer'),
     geocoder = require('geocoder');
     
 var { isLoggedIn, checkUserCampground, isAdmin } = middleware; // destructuring assignment
@@ -86,6 +84,7 @@ router.get("/:id", function(req, res) {
         res.render("campgrounds/show", {campground: foundCampground});
     });
 });
+
 
 //EDIT FORM
 router.get("/:id/edit", isLoggedIn, checkUserCampground, function(req,res){
