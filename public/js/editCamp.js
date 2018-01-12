@@ -38,8 +38,8 @@ $(function() {
         $("." + data.files[0].size).children().removeClass("start");
         
     }).bind('cloudinaryprogress', function(e, data) { 
-       $("." + data.files[0].size).find(".progress").children().css('width', Math.round((data.loaded * 100.0) / data.total) + '%');
-       $("." + data.files[0].size).find(".progress").children().text( Math.round((data.loaded * 100.0) / data.total) + '%'); 
+      $("." + data.files[0].size).find(".progress").children().css('width', Math.round((data.loaded * 100.0) / data.total) + '%');
+      $("." + data.files[0].size).find(".progress").children().text( Math.round((data.loaded * 100.0) / data.total) + '%'); 
         
     }).bind('fileuploadsend', function(e, data){
         $('#imgs-group').append(`
@@ -60,6 +60,37 @@ $(function() {
         </div>
       `);
       hasAnyLogo();
+    });
+    
+    $('#select-img-btn').on('click', function(e){
+      $("#image").trigger('click');
+      if($("#helpImage").hasClass("hidden") === false){
+          $("#helpImage").addClass("hidden"); 
+      }
+    });
+    
+    $(':input[required]').on('change input', function(e){
+        var $helpId = $(this).attr('aria-describedby');
+        if($('#' + $helpId).hasClass('hidden') === false){
+          $('#' + $helpId).addClass('hidden') 
+        }
+    });
+    
+    $("#submit-btn").click(function(e){
+        e.preventDefault();
+        var $arr = $("#imgs-group").find("div.col-md-5.col-sm-5");
+        var $helpId;
+        $(':input[required]').each(function(){
+            if($(this).val() == 0){
+                $helpId = $(this).attr('aria-describedby');
+                $('#' + $helpId).removeClass('hidden');
+                $(this).focus();
+            }else if ($arr.length === 0){
+                $("#helpImage").removeClass("hidden");
+            }else{
+                $("#createForm").submit();
+            }
+        })
     });
     
 });

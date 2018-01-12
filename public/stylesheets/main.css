@@ -125,12 +125,7 @@ body {
     display: none;
 }
 
-/* Edit camp */
-
-/*.img-edit{*/
-/*    width: 200px;*/
-/*    height: auto;*/
-/*}*/
+/*----- CREATE/EDIT campground -------*/
 
 .removeIcon {
     position: absolute;
@@ -194,4 +189,8 @@ body {
 .img-inLine {
     height: 100px !important;
     width: auto !important;
+}
+
+.help-block{
+    color:red;
 }

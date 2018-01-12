@@ -102,6 +102,7 @@ router.put("/:id", isLoggedIn, checkUserCampground, function(req,res){
           req.flash('error', 'Invalid address');
           return res.redirect('back');
         }
+        
         req.body.campground.lat = data.results[0].geometry.location.lat;
         req.body.campground.lng = data.results[0].geometry.location.lng;
         req.body.campground.location = data.results[0].formatted_address;
