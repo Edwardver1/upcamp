@@ -84,7 +84,7 @@ router.get("/:id", function(req, res) {
 });
 
 //EDIT FORM
-router.get("/:id/edit", isLoggedIn, checkUserCampground, function(req,res){
+router.get("/:id/edit",  function(req,res){
    Campground.findById(req.params.id,function(err,foundCampground){
        if ( err || !foundCampground){
            req.flash("error", "Sorry, campground doesn't exist");
@@ -94,18 +94,22 @@ router.get("/:id/edit", isLoggedIn, checkUserCampground, function(req,res){
        }
    }); 
 });
-
+// isLoggedIn, checkUserCampground,
 //UPDATE 
-router.put("/:id", isLoggedIn, checkUserCampground, function(req,res){
+router.put("/:id",  function(req,res){
     geocoder.geocode(req.body.campground.location, function (err, data) {
         if (err || data.status === 'ZERO_RESULTS') {
           req.flash('error', 'Invalid address');
           return res.redirect('back');
         }
-        
-        req.body.campground.lat = data.results[0].geometry.location.lat;
-        req.body.campground.lng = data.results[0].geometry.location.lng;
-        req.body.campground.location = data.results[0].formatted_address;
+        if(data.results[0]){
+            req.flash("success","Successfully Updated!");
+            req.body.campground.lat = data.results[0].geometry.location.lat;
+            req.body.campground.lng = data.results[0].geometry.location.lng;
+            req.body.campground.location = data.results[0].formatted_address;
+        }else{
+            req.flash("error","Something went wrong! Try change location again");
+        }
         req.body.campground.images = [];
         req.body.campground.images = req.body.campground.images.concat(req.body.urls);
         req.body.campground.description = req.sanitize(req.body.campground.description);
@@ -114,7 +118,6 @@ router.put("/:id", isLoggedIn, checkUserCampground, function(req,res){
                 req.flash("error", err.message);
                 return res.redirect("back");
             } 
-            req.flash("success","Successfully Updated!");
             res.redirect("/campgrounds/" + updatedCampground._id);
         });
     });
