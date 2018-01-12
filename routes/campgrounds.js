@@ -64,6 +64,10 @@ router.get("/new", isLoggedIn, function(req,res){
   res.render("campgrounds/new"); 
 });
 
+router.get("/cloudinary_cors", function(req,res){
+  res.render("campgrounds/cloudinary_cors"); 
+});
+
 //CREATE NEW
 router.post("/", isLoggedIn, upload.array('images'), function(req,res){
     geocoder.geocode(req.body.campground.location, function (err, data) {
@@ -141,32 +145,22 @@ router.put("/:id", isLoggedIn, checkUserCampground, upload.array('images'),  fun
         req.body.campground.location = data.results[0].formatted_address;
         req.body.campground.images = [];
         req.body.campground.images = req.body.campground.images.concat(req.body.urls);
-        var promises = [];
-        req.files.forEach(function(file){
-            promises.push(
-                cloudinary.uploader.upload(file.path, function(result) {
-                    return result;
-                })  
-            )
-        });   
-        Promise.all(promises).then(function(results){
-            for(var i = 0; i < results.length; i++){
-                req.body.campground.images.push(results[i].secure_url)
-            };
-            req.body.campground.description = req.sanitize(req.body.campground.description);
-            Campground.findByIdAndUpdate(req.params.id, {$set: req.body.campground}, function(err,updatedCampground){
-                if(err){
-                    req.flash("error", err.message);
-                    return res.redirect("back");
-                } 
-                req.flash("success","Successfully Updated!");
-                res.redirect("/campgrounds/" + updatedCampground._id);
-                  
-            });
+        req.body.campground.description = req.sanitize(req.body.campground.description);
+        Campground.findByIdAndUpdate(req.params.id, {$set: req.body.campground}, function(err,updatedCampground){
+            if(err){
+                req.flash("error", err.message);
+                return res.redirect("back");
+            } 
+            req.flash("success","Successfully Updated!");
+            res.redirect("/campgrounds/" + updatedCampground._id);
+              
         });
     });
     
+    
 });
+
+
 
 //DELETE
 router.delete("/:id", isLoggedIn, checkUserCampground,  function(req,res){

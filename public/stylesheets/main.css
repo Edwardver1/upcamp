@@ -147,6 +147,22 @@ body {
 .logo img{
   opacity: 0.5;
 }
+
+.start{
+  background-color: #ccc;
+  
+}
+.start img{
+  opacity: 0.1;
+}
+
+.progress{
+    position: absolute;
+    top: 30%;
+    width: 78%;
+    display: block;
+}
+
 .logo-text{
     position: absolute;
     top: 70%;
