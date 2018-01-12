@@ -59,7 +59,17 @@ $(function() {
           </div>
         </div>
       `);
+      hasAnyLogo();
     });
     
 });
 
+function hasAnyLogo(){
+    var $div = $("#imgs-group").find("div.col-md-5.col-sm-5");
+    if($div.length === 1){
+        $div.addClass("col-logo");
+        $div.children().addClass("logo");
+        $div.find("a").addClass("hidden");
+        $div.find("span").removeClass("hidden");
+    }
+};

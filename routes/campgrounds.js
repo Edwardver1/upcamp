@@ -8,27 +8,6 @@ var express = require("express"),
     
 var { isLoggedIn, checkUserCampground, isAdmin } = middleware; // destructuring assignment
 
-//Image upload conf
-var storage = multer.diskStorage({
-  filename: function(req, file, callback) {
-    callback(null, Date.now() + file.originalname);
-  }
-});
-var imageFilter = function (req, file, cb) {
-    // accept image files only
-    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
-        return cb(new Error('Only image files are allowed!'), false);
-    }
-    cb(null, true);
-};
-var upload = multer({ storage: storage, fileFilter: imageFilter});
-var cloudinary = require('cloudinary');
-cloudinary.config({ 
-  cloud_name: 'upcampinc', 
-  api_key: process.env.CLOUDINARY_API_KEY, 
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
-
 // Define escapeRegex function for search feature
 function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -64,12 +43,8 @@ router.get("/new", isLoggedIn, function(req,res){
   res.render("campgrounds/new"); 
 });
 
-router.get("/cloudinary_cors", function(req,res){
-  res.render("campgrounds/cloudinary_cors"); 
-});
-
 //CREATE NEW
-router.post("/", isLoggedIn, upload.array('images'), function(req,res){
+router.post("/", isLoggedIn, function(req,res){
     geocoder.geocode(req.body.campground.location, function (err, data) {
         if (err || data.status === 'ZERO_RESULTS') {
           req.flash('error', 'Invalid address');
@@ -78,32 +53,20 @@ router.post("/", isLoggedIn, upload.array('images'), function(req,res){
         req.body.campground.lat = data.results[0].geometry.location.lat;
         req.body.campground.lng = data.results[0].geometry.location.lng;
         req.body.campground.location = data.results[0].formatted_address;
-        var promises = [];
-        req.files.forEach(function(file){
-            promises.push(
-                cloudinary.uploader.upload(file.path, function(result) {
-                    return result;
-                })  
-            )
-        });
-        Promise.all(promises).then(function(results){
-            req.body.campground.images = [];
-            for(var i = 0; i < results.length; i++){
-                req.body.campground.images.push(results[i].secure_url)
-            };
-            // add author to campground
-            req.body.campground.author = {
-              id: req.user._id,
-              username: req.user.username
-            };
-            req.body.campground.description = req.sanitize(req.body.campground.description);
-            Campground.create(req.body.campground, function(err, campground) {
-              if (err) {
-                req.flash('error', err.message);
-                return res.redirect('back');
-              }
-            res.redirect('/campgrounds/' + campground.id);
-            });
+        req.body.campground.images = [];
+        req.body.campground.images = req.body.campground.images.concat(req.body.urls);
+        // add author to campground
+        req.body.campground.author = {
+          id: req.user._id,
+          username: req.user.username
+        };
+        req.body.campground.description = req.sanitize(req.body.campground.description);
+        Campground.create(req.body.campground, function(err, campground) {
+          if (err) {
+            req.flash('error', err.message);
+            return res.redirect('back');
+          }
+          res.redirect('/campgrounds/' + campground.id);
         });
     });
 });
@@ -116,7 +79,6 @@ router.get("/:id", function(req, res) {
             req.flash('error', 'Sorry, that campground does not exist!');
             return res.redirect('/campgrounds');
         }
-
         res.render("campgrounds/show", {campground: foundCampground});
     });
 });
@@ -134,7 +96,7 @@ router.get("/:id/edit", isLoggedIn, checkUserCampground, function(req,res){
 });
 
 //UPDATE 
-router.put("/:id", isLoggedIn, checkUserCampground, upload.array('images'),  function(req,res){
+router.put("/:id", isLoggedIn, checkUserCampground, function(req,res){
     geocoder.geocode(req.body.campground.location, function (err, data) {
         if (err || data.status === 'ZERO_RESULTS') {
           req.flash('error', 'Invalid address');
@@ -153,17 +115,14 @@ router.put("/:id", isLoggedIn, checkUserCampground, upload.array('images'),  fun
             } 
             req.flash("success","Successfully Updated!");
             res.redirect("/campgrounds/" + updatedCampground._id);
-              
         });
     });
-    
-    
 });
 
 
 
 //DELETE
-router.delete("/:id", isLoggedIn, checkUserCampground,  function(req,res){
+router.delete("/:id", isLoggedIn, checkUserCampground, function(req,res){
     Campground.findByIdAndRemove(req.params.id,function(err){
         if(err){
             req.flash('error', err.message);
