@@ -2,7 +2,24 @@ $(function() {
   
     $('#imgs-group').on('click', '.removeIcon', function(e){
         e.preventDefault();
-        $(this).parent().parent().remove();
+        var $arr = $("#imgs-group").find("div.col-md-5.col-sm-5");
+        var $div = $(this).parent().parent();
+        // handle remove first image issue
+        if($arr.length > 2 && ($arr.get().indexOf($div.get(0)) === 0)){
+            var $logoUrl = $("#imgs-group").find("div.col-md-5.col-sm-5:first-child").find('input').attr('value');
+            var $nextToLogoUrl = $("#imgs-group").find("div.col-md-5.col-sm-5:nth-child(2)").find('input').attr('value');
+            console.log($nextToLogoUrl);
+            console.log($div.siblings('div.col-logo').find('input'));
+            $div.remove();
+            $("#imgs-group").find("div.col-md-5.col-sm-5:first-child").find('input').attr('value',$logoUrl);
+            $("#imgs-group").find('div.col-md-5.col-sm-5.col-logo').find('input').attr('value',$nextToLogoUrl);
+        } else if ($arr.length = 2 && ($arr.get().indexOf($div.get(0)) === 0)) {
+            var $logoUrl = $("#imgs-group").find("div.col-md-5.col-sm-5:first-child").find('input').attr('value');
+            $div.siblings('div.col-logo').find('input').attr('value',$logoUrl);
+            $div.remove();
+        } else {
+            $div.remove();
+        }
     });
     
     $('#imgs-group').on('click', '.logo-btn', function(e){
@@ -26,13 +43,18 @@ $(function() {
         $logo.find(".logo-text").removeClass("hidden");
         $logo.find("input").attr("value",$firstUrl);
         
+        // console.log("$logo");
+        // console.log($logo);
+        // console.log("$first");
+        // console.log($first);
+        
+        
     });
     
     $('.upload_field').unsigned_cloudinary_upload("sample_f5c4ba5ba7ee00cb7024c39a408329f7232acb6b", 
       { cloud_name: 'upcampinc'}, 
       { multiple: true }
     ).bind('cloudinarydone', function(e, data) {
-        $("." + data.files[0].size).find("img").attr("src",data.result.secure_url);
         $("." + data.files[0].size).find("input").attr("value",data.result.secure_url);
         $("." + data.files[0].size).find(".progress").remove();
         $("." + data.files[0].size).children().removeClass("start");
@@ -42,10 +64,11 @@ $(function() {
       $("." + data.files[0].size).find(".progress").children().text( Math.round((data.loaded * 100.0) / data.total) + '%'); 
         
     }).bind('fileuploadsend', function(e, data){
+        var urlImg = window.URL.createObjectURL(data.files[0]);
         $('#imgs-group').append(`
         <div class="col-md-5 col-sm-5 ${data.files[0].size}">
           <div class="thumbnail image-container start">
-            <img class="img-inline" style="height:100px;width:auto;" src="https://media.istockphoto.com/photos/dark-texture-background-of-black-fabric-picture-id185317608?k=6&m=185317608&s=612x612&w=0&h=4sun4mTS45BThoiT5e0t976QNDZQ-LkJD-Ex6g6nHtM=">
+            <img class="img-inline" style="height:100px;width:auto;" src="${urlImg}">
             <div class="progress">
                 <div class="progress-bar" role="progressbar" style="width: 30%;" 
                  aria-valuemin="0" aria-valuemax="100">0%</div>
