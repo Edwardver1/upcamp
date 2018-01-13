@@ -91,43 +91,44 @@ $(function() {
     });
     
     // // ----- Remove helpBlock on input ------ //
-    // $(':input[required]').on('change input', function(e){
-    //     var $helpId = $(this).attr('aria-describedby');
-    //     if($('#' + $helpId).hasClass('hidden') === false){
-    //       $('#' + $helpId).addClass('hidden') 
-    //     }
-    // });
+    $(':input[required]').on('change input', function(e){
+        var $helpId = $(this).attr('aria-describedby');
+        if($('#' + $helpId).hasClass('hidden') === false){
+          $('#' + $helpId).addClass('hidden') 
+        }
+    });
     
     // // ----- Submit form + validation ------ //
-    // $("#submit-btn").click(function(e){
-    //     e.preventDefault();
-    //     var $arr = $("#imgs-group").find("div.col-md-5.col-sm-5");
-    //     var $helpId;
-    //     $(':input[required]').each(function(){
-    //         if($(this).val() == 0){
-    //             $helpId = $(this).attr('aria-describedby');
-    //             $('#' + $helpId).removeClass('hidden');
-    //             $(this).focus();
-    //         }else if ($arr.length === 0){
-    //             $("#helpImage").removeClass("hidden");
-    //         }else{
-    //             $("#createForm").submit();
-    //         }
-    //     })
-    // });
+    $("#submit-btn").click(function(e){
+        e.preventDefault();
+        var $arr = $("#imgs-group").find("div.col-md-5.col-sm-5");
+        var $helpId;
+        $(':input[required]').each(function(){
+            if($(this).val() == 0){
+                $helpId = $(this).attr('aria-describedby');
+                $('#' + $helpId).removeClass('hidden');
+                $(this).focus();
+            }else if ($arr.length === 0){
+                $("#helpImage").removeClass("hidden");
+            }else{
+                $("#createForm").submit();
+            }
+        })
+    });
     
     $('#addCost').click(function(e){
         e.preventDefault();
-        var $season = $('#season').clone();
-        var $cost = $('#cost').clone();
-        var $div = $("<div>",{class: 'divCost'});
-        $season.removeAttr('id required aria-describedby');
-        $season.val('');
-        $cost.removeAttr('id required aria-describedby');
-        $cost.val('');
-        $div.append($season);
-        $div.append($cost);
-        $(this).before($div);
+        var $index = $(".divCost").length+1;
+
+        $(this).before(`
+        <div class="divCost">
+            <input class="form-control const-input" type="text" name="price[season]" placeholder="Season" required aria-describedby="helpSeason${$index}">
+            <span id="helpSeason${$index}" class="help-block hidden">Please provide season.</span>
+            <input class="form-control const-input" type="number" name="price[cost]" placeholder="9.99" step="0.01" min="0" required aria-describedby="helpCost${$index}">
+            <span id="helpCost${$index}" class="help-block hidden">Please provide cost.</span>
+        </div>
+        `);
+
         $('#removeCost').removeClass('hidden');
     });
     

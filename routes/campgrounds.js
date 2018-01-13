@@ -2,6 +2,7 @@ var express = require("express"),
     router  = express.Router(),
     middleware = require("../middleware"),
     Campground = require("../models/campground"),
+    Price = require("../models/price"),
     geocoder = require('geocoder');
     
 var { isLoggedIn, checkUserCampground, isAdmin } = middleware; // destructuring assignment
@@ -64,11 +65,29 @@ router.post("/", isLoggedIn, function(req,res){
         };
         req.body.campground.description = req.sanitize(req.body.campground.description);
         Campground.create(req.body.campground, function(err, campground) {
-          if (err) {
-            req.flash('error', err.message);
-            return res.redirect('back');
-          }
-          res.redirect('/campgrounds/' + campground.id);
+            if (err) {
+                req.flash('error', err.message);
+                return res.redirect('back');
+            }else {
+                //add season costs to camp
+                for(var i = 0; i < req.body.price.season.length; i++){
+                    var price = {season: req.body.price.season[i], cost: req.body.price.cost[i], campground: campground};
+                    Price.create(price,function(err,newPrice){
+                        if(err){
+                            req.flash('error', err.message);
+                            res.redirect('/campgrounds/' + campground._id);
+                        } else {
+                            Campground.findById(campground._id,function(err, foundCampground) {
+                                if(!err && foundCampground){
+                                    foundCampground.cost.push(newPrice);
+                                    foundCampground.save();
+                                }
+                            })
+                        }
+                    })
+                }
+                res.redirect('/campgrounds/' + campground._id);
+             }
         });
     });
 });
