@@ -119,57 +119,75 @@ router.get("/:id/edit",  function(req,res){
 
 //UPDATE 
 router.put("/:id",  function(req,res){
-    // geocoder.geocode(req.body.campground.location, function (err, data) {
-    //     if (err || data.status === 'ZERO_RESULTS') {
-    //       req.flash('error', 'Invalid address');
-    //       return res.redirect('back');
-    //     }
-    //     if(data.results[0]){
-    //         req.flash("success","Successfully Updated!");
-    //         req.body.campground.lat = data.results[0].geometry.location.lat;
-    //         req.body.campground.lng = data.results[0].geometry.location.lng;
-    //         req.body.campground.location = data.results[0].formatted_address;
-    //     }else{
-    //         req.flash("error","Something went wrong! Try change location again");
-    //     }
-    //     req.body.campground.images = [];
-    //     req.body.campground.images = req.body.campground.images.concat(req.body.urls);
-    //     req.body.campground.description = req.sanitize(req.body.campground.description);
-    //     Campground.findByIdAndUpdate(req.params.id, {$set: req.body.campground}, function(err,updatedCampground){
-    //         if(err){
-    //             req.flash("error", err.message);
-    //             return res.redirect("back");
-    //         } 
-    //         res.redirect("/campgrounds/" + updatedCampground._id);
-    //     });
-    // });
-    
-    Campground.findByIdAndUpdate(req.params.id, {$set: req.body.campground}, function(err,updatedCampground){
-        if(err){
-            req.flash("error", err.message);
-            return res.redirect("back");
-        } else {
-            console.log("outside loop");
-            console.log(req.body.price);
-            for(var i = 0; i < req.body.price._id.length; i++){
-                console.log('in loop ' + i);
-                console.log(req.body.price.length);
-                var price = {season: req.body.price.season[i], price: req.body.price.cost[i]};
-                Price.findByIdAndUpdate(req.body.price._id[i], {$set: price}, function(err,updatedPrice){
-                    if(err){
-                        console.log(err);
-                    } else {
-                        console.log('updated');
-                        console.log(updatedPrice);
-                    }  
-                })
-            }
-            res.redirect("/campgrounds/" + updatedCampground._id);
-        } 
-        // res.redirect("/campgrounds/" + updatedCampground._id);
+    geocoder.geocode(req.body.campground.location, function (err, data) {
+        if (err || data.status === 'ZERO_RESULTS') {
+          req.flash('error', 'Invalid address');
+          return res.redirect('back');
+        }
+        if(data.results[0]){
+            req.flash("success","Successfully Updated!");
+            req.body.campground.lat = data.results[0].geometry.location.lat;
+            req.body.campground.lng = data.results[0].geometry.location.lng;
+            req.body.campground.location = data.results[0].formatted_address;
+        }else{
+            req.flash("error","Something went wrong! Try change location again");
+        }
+        req.body.campground.images = [];
+        req.body.campground.images = req.body.campground.images.concat(req.body.urls);
+        req.body.campground.description = req.sanitize(req.body.campground.description);
+        Campground.findByIdAndUpdate(req.params.id, {$set: req.body.campground}, function(err,updatedCampground){
+            if(err){
+                req.flash("error", err.message);
+                return res.redirect("back");
+            } else {
+                //updating exists 
+                // if 1
+                if( typeof req.body.price._id === 'string' && typeof req.body.price.season === 'string'){
+                 Price.findByIdAndUpdate(req.body.price._id, {$set: {season: req.body.price.season, price: req.body.price.cost}}, function(err,updatedPrice){
+                        if(err){
+                            console.log(err);
+                        } else {
+                            console.log('updated');
+                            
+                        }  
+                    })
+                }
+                // if exists > 1
+                if(Array.isArray(req.body.price._id) && req.body.price._id.length > 1 ){
+                    for(var i = 0; i < req.body.price._id.length; i++){
+                        var price = {season: req.body.price.season[i], price: req.body.price.cost[i]};
+                        Price.findByIdAndUpdate(req.body.price._id[i], {$set: price}, function(err,updatedPrice){
+                            if(err){
+                                console.log(err);
+                            } else {
+                                console.log('updated');
+                                
+                            }  
+                        })
+                    }
+                }
+                //creating new 
+                if(req.body.price.new){
+                    // if camp has 1 or > 1 costs
+                  var start = typeof req.body.price._id === 'string' ? 1 : req.body.price._id.length;
+                  for(var i = start; i < req.body.price.season.length; i++ ){
+                     var newPrice = {season: req.body.price.season[i], price: req.body.price.cost[i], campground: updatedCampground};
+                     Price.create(newPrice,function(err,createdPrice){
+                            if(!err){
+                                Campground.findById(updatedCampground._id,function(err, foundCampground) {
+                                    if(!err && foundCampground){
+                                        foundCampground.costs.push(createdPrice);
+                                        foundCampground.save();
+                                    }
+                                })
+                            }
+                        })
+                  }   
+                }
+                res.redirect("/campgrounds/" + updatedCampground._id);
+            } 
+        });
     });
-    
-    
 });
 
 

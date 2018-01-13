@@ -122,6 +122,7 @@ $(function() {
 
         $(this).before(`
         <div class="divCost">
+            <input class="form-control hidden" type="text" name="price[new]" value="true">
             <input class="form-control const-input" type="text" name="price[season]" placeholder="Season" required aria-describedby="helpSeason${$index}">
             <span id="helpSeason${$index}" class="help-block hidden">Please provide season.</span>
             <input class="form-control const-input" type="number" name="price[cost]" placeholder="9.99" step="0.01" min="0" required aria-describedby="helpCost${$index}">
