@@ -81,8 +81,7 @@ router.get("/login",function(req, res) {
     res.render("auth/login");
 });
 
-router.post("/login", 
-    isEnabled,
+router.post("/login", isEnabled,
     passport.authenticate("local",
     {
         successRedirect: "/campgrounds",

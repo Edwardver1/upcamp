@@ -30,7 +30,8 @@ $('#users-list').on('submit', '.edit-user-form', function (e) {
 	var emailName = email.substring(0, email.lastIndexOf("@"));
 	var emailDomain = email.substring(email.lastIndexOf("@")+1, email.length);
 	var auth = $(this).parent().find('.input-auth').val();
-	var str = 'user%5Busername%5D='+username+'&user%5Bemail%5D='+emailName+'%40'+emailDomain+'&user%5BisAuthenticated%5D='+auth;
+	var enabl = $(this).parent().find('.input-enabl').val();
+	var str = 'user%5Busername%5D='+username+'&user%5Bemail%5D='+emailName+'%40'+emailDomain+'&user%5BisAuthenticated%5D='+auth+'&user%5BisEnabled%5D='+enabl;
 	$.ajax({
 		url: actionUrl,
 		data: str,
@@ -42,6 +43,7 @@ $('#users-list').on('submit', '.edit-user-form', function (e) {
 			this.originalItem.find('.username').text(user.username);
 			this.originalItem.find('.email').text(user.email);
 			this.originalItem.find('.isAuthenticated').text(user.isAuthenticated);
+			this.originalItem.find('.isEnabled').text(user.isEnabled);
 		}
 	});
 });
