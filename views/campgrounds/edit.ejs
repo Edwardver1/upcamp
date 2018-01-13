@@ -8,9 +8,22 @@
                     <label for="name">Name</label>
                     <input class="form-control" type="text" name="campground[name]" id="name" value="<%= campground.name %>">
                 </div>
-                <div class="form-group">
+                <div id="cost-group" class="form-group">
                     <label for="cost">Cost</label>
-                    <input class="form-control" type="number" name="campground[cost]" id="cost"  step="0.01" min="0" value="<%= campground.cost %>" required>
+                    <input class="form-control const-input" type="text" name="price[season]" id="season" value="<%= campground.costs[0].season %>" required aria-describedby="helpSeason">
+                    <span id="helpSeason" class="help-block hidden">Please provide season.</span>
+                    <input class="form-control const-input" type="number" name="price[cost]" id="cost" value="<%= campground.costs[0].price %>" step="0.01" min="0" required aria-describedby="helpCost">
+                    <span id="helpCost" class="help-block hidden">Please provide cost.</span>
+                    <% for(var i = 1; i < campground.costs.length; i++) {%>
+                    <div class="divCost">
+                        <input class="form-control const-input" type="text" name="price[season]"  value="<%= campground.costs[i].season %>" required aria-describedby="helpSeason<%=i%>">
+                        <span id="helpSeason<%=i%>" class="help-block hidden">Please provide season.</span>
+                        <input class="form-control const-input" type="number" name="price[cost]"  value="<%= campground.costs[i].price %>" step="0.01" min="0" required aria-describedby="helpCost<%=i%>">
+                        <span id="helpCost<%=i%>" class="help-block hidden">Please provide cost.</span>
+                    </div>    
+                    <% } %>
+                    <a href="#" id="addCost" class="btn btn-default btn-sm" role="button">Add season</a>
+                    <a href="#" id="removeCost" class="btn btn-default btn-sm hidden" role="button">Remove last</a>
                 </div>
                 <div class="form-group">
                     <label for="location">Location</label>

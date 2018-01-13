@@ -1,4 +1,6 @@
 $(function() {
+    
+    hasSecondPrice();
   
     // ----- Remove image ------ //
     $('#imgs-group').on('click', '.removeIcon', function(e){
@@ -149,5 +151,11 @@ function hasAnyLogo(){
         $div.children().addClass("logo");
         $div.find("a").addClass("hidden");
         $div.find("span").removeClass("hidden");
+    }
+};
+
+function hasSecondPrice(){
+    if($('.divCost').length > 0){
+            $("#removeCost").removeClass('hidden');
     }
 };
