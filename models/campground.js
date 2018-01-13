@@ -8,7 +8,7 @@ var campgroundSchema = new mongoose.Schema({
    lat: String,
    lng: String,
    createdAt: {type: Date, default: Date.now()},
-   cost: [ 
+   costs: [ 
       {
          type: mongoose.Schema.Types.ObjectId,
          ref: 'Price'

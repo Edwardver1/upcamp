@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 var priceSchema = new mongoose.Schema({
     season : String,
-    cost: Number,
+    price: Number,
     campground: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Campground' 

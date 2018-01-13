@@ -71,7 +71,7 @@ router.post("/", isLoggedIn, function(req,res){
             }else {
                 //add season costs to camp
                 for(var i = 0; i < req.body.price.season.length; i++){
-                    var price = {season: req.body.price.season[i], cost: req.body.price.cost[i], campground: campground};
+                    var price = {season: req.body.price.season[i], price: req.body.price.cost[i], campground: campground};
                     Price.create(price,function(err,newPrice){
                         if(err){
                             req.flash('error', err.message);
@@ -79,7 +79,7 @@ router.post("/", isLoggedIn, function(req,res){
                         } else {
                             Campground.findById(campground._id,function(err, foundCampground) {
                                 if(!err && foundCampground){
-                                    foundCampground.cost.push(newPrice);
+                                    foundCampground.costs.push(newPrice);
                                     foundCampground.save();
                                 }
                             })
@@ -95,7 +95,7 @@ router.post("/", isLoggedIn, function(req,res){
 //SHOW
 router.get("/:id", function(req, res) {
     //find the campground with provided ID
-    Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
+    Campground.findById(req.params.id).populate("comments costs").exec(function(err, foundCampground){
         if(err || !foundCampground){
             req.flash('error', 'Sorry, that campground does not exist!');
             return res.redirect('/campgrounds');

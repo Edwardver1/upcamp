@@ -199,3 +199,17 @@ body {
     margin-bottom: 10px;
 }
 
+/*----- Show campground -------*/
+
+.camp-title {
+    color: #337ab7;
+}
+
+.fees-title {
+    color: #2b5f8e;
+    font-size: 17.5px;
+}
+
+.fees{
+    margin-bottom: 5px;
+}
