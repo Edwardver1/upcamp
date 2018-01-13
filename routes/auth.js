@@ -1,5 +1,6 @@
 var express  = require("express"),
     router   = express.Router(),
+    middleware = require("../middleware"),
     passport = require("passport"),
     User     = require("../models/user"),
     sgMail   = require("@sendgrid/mail"),
@@ -7,6 +8,7 @@ var express  = require("express"),
     crypto = require("crypto"),
     emailExist = require("../config/passport");
     
+var { isEnabled, isAdmin } = middleware; // destructuring assignment
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 //Register logic
@@ -79,7 +81,9 @@ router.get("/login",function(req, res) {
     res.render("auth/login");
 });
 
-router.post("/login",passport.authenticate("local",
+router.post("/login", 
+    isEnabled,
+    passport.authenticate("local",
     {
         successRedirect: "/campgrounds",
         failureRedirect: "/login",

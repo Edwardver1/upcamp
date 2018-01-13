@@ -1,4 +1,5 @@
 var Campground = require('../models/campground');
+var User = require('../models/user');
 module.exports = {
   isLoggedIn: function(req, res, next){
       if(req.isAuthenticated()){
@@ -29,5 +30,20 @@ module.exports = {
       req.flash('error', 'You don\'t have permissions to do that');
       res.redirect('back');
     }
+  },
+  isEnabled: function(req,res,next){
+    User.find({email: req.body.email},function(err,foundUser){
+      if(err){
+        req.flash('error', 'Oops, can\'t find User with such email!');
+        res.redirect('/campgrounds');
+      } else {
+        if(foundUser[0].isEnabled === false){
+          req.flash('error', 'Oops, you are disabled!');
+          res.redirect('/campgrounds');
+        } else {
+          next()
+        }
+      }
+    })
   }
 }
