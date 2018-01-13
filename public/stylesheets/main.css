@@ -191,6 +191,11 @@ body {
     width: auto !important;
 }
 
-.help-block{
+.help-block {
     color:red;
 }
+
+.const-input {
+    margin-bottom: 10px;
+}
+

@@ -8,10 +8,12 @@ var campgroundSchema = new mongoose.Schema({
    lat: String,
    lng: String,
    createdAt: {type: Date, default: Date.now()},
-   cost: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Price'
-   },
+   cost: [ 
+      {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'Price'
+      }
+   ],
    author: {
       id: {
          type: mongoose.Schema.Types.ObjectId,

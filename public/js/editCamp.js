@@ -1,5 +1,6 @@
 $(function() {
   
+    // ----- Remove image ------ //
     $('#imgs-group').on('click', '.removeIcon', function(e){
         e.preventDefault();
         var $arr = $("#imgs-group").find("div.col-md-5.col-sm-5");
@@ -22,6 +23,7 @@ $(function() {
         }
     });
     
+    // ----- Switch logo ------ //
     $('#imgs-group').on('click', '.logo-btn', function(e){
         e.preventDefault();
         var $logo = $(this).parent().parent().parent();
@@ -42,15 +44,10 @@ $(function() {
         $logo.find(".logo-btn").addClass("hidden");
         $logo.find(".logo-text").removeClass("hidden");
         $logo.find("input").attr("value",$firstUrl);
-        
-        // console.log("$logo");
-        // console.log($logo);
-        // console.log("$first");
-        // console.log($first);
-        
-        
+
     });
     
+    // ----- Upload image  ------ //
     $('.upload_field').unsigned_cloudinary_upload("sample_f5c4ba5ba7ee00cb7024c39a408329f7232acb6b", 
       { cloud_name: 'upcampinc'}, 
       { multiple: true }
@@ -85,6 +82,7 @@ $(function() {
       hasAnyLogo();
     });
     
+    // ----- Trigger selectImage input ------ //
     $('#select-img-btn').on('click', function(e){
       $("#image").trigger('click');
       if($("#helpImage").hasClass("hidden") === false){
@@ -92,28 +90,53 @@ $(function() {
       }
     });
     
-    $(':input[required]').on('change input', function(e){
-        var $helpId = $(this).attr('aria-describedby');
-        if($('#' + $helpId).hasClass('hidden') === false){
-          $('#' + $helpId).addClass('hidden') 
-        }
+    // // ----- Remove helpBlock on input ------ //
+    // $(':input[required]').on('change input', function(e){
+    //     var $helpId = $(this).attr('aria-describedby');
+    //     if($('#' + $helpId).hasClass('hidden') === false){
+    //       $('#' + $helpId).addClass('hidden') 
+    //     }
+    // });
+    
+    // // ----- Submit form + validation ------ //
+    // $("#submit-btn").click(function(e){
+    //     e.preventDefault();
+    //     var $arr = $("#imgs-group").find("div.col-md-5.col-sm-5");
+    //     var $helpId;
+    //     $(':input[required]').each(function(){
+    //         if($(this).val() == 0){
+    //             $helpId = $(this).attr('aria-describedby');
+    //             $('#' + $helpId).removeClass('hidden');
+    //             $(this).focus();
+    //         }else if ($arr.length === 0){
+    //             $("#helpImage").removeClass("hidden");
+    //         }else{
+    //             $("#createForm").submit();
+    //         }
+    //     })
+    // });
+    
+    $('#addCost').click(function(e){
+        e.preventDefault();
+        var $season = $('#season').clone();
+        var $cost = $('#cost').clone();
+        var $div = $("<div>",{class: 'divCost'});
+        $season.removeAttr('id required aria-describedby');
+        $season.val('');
+        $cost.removeAttr('id required aria-describedby');
+        $cost.val('');
+        $div.append($season);
+        $div.append($cost);
+        $(this).before($div);
+        $('#removeCost').removeClass('hidden');
     });
     
-    $("#submit-btn").click(function(e){
+     $('#removeCost').click(function(e){
         e.preventDefault();
-        var $arr = $("#imgs-group").find("div.col-md-5.col-sm-5");
-        var $helpId;
-        $(':input[required]').each(function(){
-            if($(this).val() == 0){
-                $helpId = $(this).attr('aria-describedby');
-                $('#' + $helpId).removeClass('hidden');
-                $(this).focus();
-            }else if ($arr.length === 0){
-                $("#helpImage").removeClass("hidden");
-            }else{
-                $("#createForm").submit();
-            }
-        })
+        $('.divCost:last-of-type').remove();
+        if($('.divCost').length === 0){
+            $(this).addClass('hidden');
+        }
     });
     
 });
