@@ -1,7 +1,9 @@
 <% include ../partials/header %> 
 
 <div class="row ">
+    <button id="test">test</button>
         <h1 class="text-center">Update <%= campground.name %></h1>
+        <p id="campId" class="hidden"><%= campground._id %></p>
         <div class="form-center">
             <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST">
                 <div class="form-group">
@@ -10,12 +12,14 @@
                 </div>
                 <div id="cost-group" class="form-group">
                     <label for="cost">Cost</label>
+                    <input class="form-control hidden" type="text" name="price[_id]" value="<%= campground.costs[0]._id %>">
                     <input class="form-control const-input" type="text" name="price[season]" id="season" value="<%= campground.costs[0].season %>" required aria-describedby="helpSeason">
                     <span id="helpSeason" class="help-block hidden">Please provide season.</span>
                     <input class="form-control const-input" type="number" name="price[cost]" id="cost" value="<%= campground.costs[0].price %>" step="0.01" min="0" required aria-describedby="helpCost">
                     <span id="helpCost" class="help-block hidden">Please provide cost.</span>
                     <% for(var i = 1; i < campground.costs.length; i++) {%>
                     <div class="divCost">
+                        <input class="form-control hidden" type="text" name="price[_id]" value="<%= campground.costs[i]._id %>">
                         <input class="form-control const-input" type="text" name="price[season]"  value="<%= campground.costs[i].season %>" required aria-describedby="helpSeason<%=i%>">
                         <span id="helpSeason<%=i%>" class="help-block hidden">Please provide season.</span>
                         <input class="form-control const-input" type="number" name="price[cost]"  value="<%= campground.costs[i].price %>" step="0.01" min="0" required aria-describedby="helpCost<%=i%>">

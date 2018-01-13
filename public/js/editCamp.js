@@ -11,8 +11,6 @@ $(function() {
         if($arr.length > 2 && ($arr.get().indexOf($div.get(0)) === 0)){
             var $logoUrl = $("#imgs-group").find("div.col-md-5.col-sm-5:first-child").find('input').attr('value');
             var $nextToLogoUrl = $("#imgs-group").find("div.col-md-5.col-sm-5:nth-child(2)").find('input').attr('value');
-            console.log($nextToLogoUrl);
-            console.log($div.siblings('div.col-logo').find('input'));
             $div.remove();
             $("#imgs-group").find("div.col-md-5.col-sm-5:first-child").find('input').attr('value',$logoUrl);
             $("#imgs-group").find('div.col-md-5.col-sm-5.col-logo').find('input').attr('value',$nextToLogoUrl);
@@ -136,10 +134,42 @@ $(function() {
     
      $('#removeCost').click(function(e){
         e.preventDefault();
-        $('.divCost:last-of-type').remove();
+        if($('.divCost:last-of-type').find('input[name="price[_id]"]')){
+            var campId = $('#campId').text();
+            var priceId = $('.divCost:last-of-type').find('input[name="price[_id]"]').val();
+            $.ajax({
+			url: '/campgrounds/'+campId+'/costs/'+priceId,
+			type: 'DELETE',
+// 			itemToDelete: $itemToDelete,
+			success: function success(data) {
+				// this.itemToDelete.remove();
+				$('.divCost:last-of-type').remove();
+				console.log(data);
+			}
+		    });
+        }else{
+         $('.divCost:last-of-type').remove();   
+        }
         if($('.divCost').length === 0){
             $(this).addClass('hidden');
         }
+    });
+    
+    $("#test").click(function(){
+        var id = $('#campId').text();
+		var actionUrl = '/costs';
+// 		console.log(actionUrl);
+// 		var $itemToDelete = $(this).closest('.row');
+		$.ajax({
+			url: '/campgrounds/'+id+'/costs/sdsds',
+			type: 'DELETE',
+// 			itemToDelete: $itemToDelete,
+			success: function success(data) {
+				// this.itemToDelete.remove();
+				console.log(data);
+			}
+		});
+
     });
     
 });

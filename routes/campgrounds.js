@@ -119,30 +119,57 @@ router.get("/:id/edit",  function(req,res){
 
 //UPDATE 
 router.put("/:id",  function(req,res){
-    geocoder.geocode(req.body.campground.location, function (err, data) {
-        if (err || data.status === 'ZERO_RESULTS') {
-          req.flash('error', 'Invalid address');
-          return res.redirect('back');
-        }
-        if(data.results[0]){
-            req.flash("success","Successfully Updated!");
-            req.body.campground.lat = data.results[0].geometry.location.lat;
-            req.body.campground.lng = data.results[0].geometry.location.lng;
-            req.body.campground.location = data.results[0].formatted_address;
-        }else{
-            req.flash("error","Something went wrong! Try change location again");
-        }
-        req.body.campground.images = [];
-        req.body.campground.images = req.body.campground.images.concat(req.body.urls);
-        req.body.campground.description = req.sanitize(req.body.campground.description);
-        Campground.findByIdAndUpdate(req.params.id, {$set: req.body.campground}, function(err,updatedCampground){
-            if(err){
-                req.flash("error", err.message);
-                return res.redirect("back");
-            } 
+    // geocoder.geocode(req.body.campground.location, function (err, data) {
+    //     if (err || data.status === 'ZERO_RESULTS') {
+    //       req.flash('error', 'Invalid address');
+    //       return res.redirect('back');
+    //     }
+    //     if(data.results[0]){
+    //         req.flash("success","Successfully Updated!");
+    //         req.body.campground.lat = data.results[0].geometry.location.lat;
+    //         req.body.campground.lng = data.results[0].geometry.location.lng;
+    //         req.body.campground.location = data.results[0].formatted_address;
+    //     }else{
+    //         req.flash("error","Something went wrong! Try change location again");
+    //     }
+    //     req.body.campground.images = [];
+    //     req.body.campground.images = req.body.campground.images.concat(req.body.urls);
+    //     req.body.campground.description = req.sanitize(req.body.campground.description);
+    //     Campground.findByIdAndUpdate(req.params.id, {$set: req.body.campground}, function(err,updatedCampground){
+    //         if(err){
+    //             req.flash("error", err.message);
+    //             return res.redirect("back");
+    //         } 
+    //         res.redirect("/campgrounds/" + updatedCampground._id);
+    //     });
+    // });
+    
+    Campground.findByIdAndUpdate(req.params.id, {$set: req.body.campground}, function(err,updatedCampground){
+        if(err){
+            req.flash("error", err.message);
+            return res.redirect("back");
+        } else {
+            console.log("outside loop");
+            console.log(req.body.price);
+            for(var i = 0; i < req.body.price._id.length; i++){
+                console.log('in loop ' + i);
+                console.log(req.body.price.length);
+                var price = {season: req.body.price.season[i], price: req.body.price.cost[i]};
+                Price.findByIdAndUpdate(req.body.price._id[i], {$set: price}, function(err,updatedPrice){
+                    if(err){
+                        console.log(err);
+                    } else {
+                        console.log('updated');
+                        console.log(updatedPrice);
+                    }  
+                })
+            }
             res.redirect("/campgrounds/" + updatedCampground._id);
-        });
+        } 
+        // res.redirect("/campgrounds/" + updatedCampground._id);
     });
+    
+    
 });
 
 

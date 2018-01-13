@@ -18,6 +18,7 @@ var indexRoutes      = require("./routes/index"),
     authRoutes       = require("./routes/auth"),
     campgroundRoutes = require("./routes/campgrounds"),
     commentRoutes    = require("./routes/comments"),
+    priceRoutes      = require("./routes/price"),
     userRoutes       = require("./routes/user");
 
 mongoose.connect(dburl,{useMongoClient: true});
@@ -58,6 +59,7 @@ app.use("/",indexRoutes);
 app.use("/",authRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
+app.use("/campgrounds/:id/costs", priceRoutes);
 app.use("/admin/users", userRoutes);
 
 
