@@ -84,6 +84,7 @@ $('#user-search').on('input', function() {
             <td class="user-text username">${ user.username }</td>
             <td class="user-text email">${ user.email }</td>
             <td class="user-text isAuthenticated">${ user.isAuthenticated }</td>
+            <td class="user-text isEnabled">${ user.isEnabled }</td>
             <form class="edit-user-form" action="/admin/users/${ user._id }" method="POST">
               <td class="edit-td">
                   <input class="form-control input-username" type="text" value="${ user.username }"  name="user[username]">
@@ -97,6 +98,12 @@ $('#user-search').on('input', function() {
                       <option value='false'>False</option>
                   </select>
               </td>
+               <td class="edit-td">
+                  <select class="form-control input-enabl" name="user[isEnabled]">
+                      <option value='true'>True</option>
+                      <option value='false'>False</option>
+                  </select>
+               </td>
                 
             </form>
             <td class="td-buttons">
