@@ -91,7 +91,7 @@ $(function() {
     });
     
     // // ----- Remove helpBlock on input ------ //
-    $(':input[required]').on('change input', function(e){
+    $('form').on('input change', ':input[required]', function(e){
         var $helpId = $(this).attr('aria-describedby');
         if($('#' + $helpId).hasClass('hidden') === false){
           $('#' + $helpId).addClass('hidden') 
@@ -103,17 +103,21 @@ $(function() {
         e.preventDefault();
         var $arr = $("#imgs-group").find("div.col-md-5.col-sm-5");
         var $helpId;
+        var hasHelp = 0;
         $(':input[required]').each(function(){
             if($(this).val() == 0){
                 $helpId = $(this).attr('aria-describedby');
                 $('#' + $helpId).removeClass('hidden');
                 $(this).focus();
+                return hasHelp += 1;
             }else if ($arr.length === 0){
                 $("#helpImage").removeClass("hidden");
-            }else{
-                $("#createForm").submit();
+                return hasHelp += 1;
             }
         })
+        if(hasHelp === 0){
+            $("#createForm").submit();
+        }
     });
     
     $('#addCost').click(function(e){
@@ -125,7 +129,7 @@ $(function() {
             <input class="form-control hidden" type="text" name="price[new]" value="true">
             <input class="form-control const-input" type="text" name="price[season]" placeholder="Season" required aria-describedby="helpSeason${$index}">
             <span id="helpSeason${$index}" class="help-block hidden">Please provide season.</span>
-            <input class="form-control const-input" type="number" name="price[cost]" placeholder="9.99" step="0.01" min="0" required aria-describedby="helpCost${$index}">
+            <input class="form-control const-input" type="number" name="price[cost]" placeholder="9.99" step="0.01" min="0.01" required aria-describedby="helpCost${$index}">
             <span id="helpCost${$index}" class="help-block hidden">Please provide cost.</span>
         </div>
         `);
@@ -141,37 +145,20 @@ $(function() {
             $.ajax({
 			url: '/campgrounds/'+campId+'/costs/'+priceId,
 			type: 'DELETE',
-// 			itemToDelete: $itemToDelete,
 			success: function success(data) {
-				// this.itemToDelete.remove();
-				$('.divCost:last-of-type').remove();
-				console.log(data);
+				// $('.divCost:last-of-type').remove();
 			}
 		    });
-        }else{
-         $('.divCost:last-of-type').remove();   
         }
+        // else{
+         $('.divCost:last-of-type').remove();   
+        // }
         if($('.divCost').length === 0){
             $(this).addClass('hidden');
         }
     });
-    
-    $("#test").click(function(){
-        var id = $('#campId').text();
-		var actionUrl = '/costs';
-// 		console.log(actionUrl);
-// 		var $itemToDelete = $(this).closest('.row');
-		$.ajax({
-			url: '/campgrounds/'+id+'/costs/sdsds',
-			type: 'DELETE',
-// 			itemToDelete: $itemToDelete,
-			success: function success(data) {
-				// this.itemToDelete.remove();
-				console.log(data);
-			}
-		});
 
-    });
+    
     
 });
 

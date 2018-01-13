@@ -84,7 +84,7 @@ function createComment(data){
 	var $divFormGroup1 = $('<div>', {class: 'form-group'});
 	var $divFormGroup2 = $('<div>', {class: 'form-group'});
 	var $inputUpdate = $('<input>',{class: 'form-control', type: 'text', value: data.text, name: 'comment[text]'});
-	var $submitButton = $('<button>',{class: 'btn btn-xs btn-primary', text: 'Submit'});
+	var $submitButton = $('<button>',{class: 'btn btn-xs btn-primary', text: 'Save'});
 	var $divButtons = $('<div>',{class: 'pull-right'});
 	var $updateButton = $('<button>',{style: 'margin-right: 5px', class: 'btn btn-xs btn-warning edit-button', text: 'EDIT'});
 	var $form = $('<form>', {class: 'delete-form', action: '/campgrounds/' + getID() + '/comments/' + data._id + '?_method=DELETE', method: 'POST'});

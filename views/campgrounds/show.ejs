@@ -87,7 +87,7 @@
                     <input class="form-control" type="text" value="<%=comment.text %>"  name="comment[text]">
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-xs btn-primary">Submit!</button>
+                    <button class="btn btn-xs btn-primary">Save</button>
                 </div>
             </form>
              <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>

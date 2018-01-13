@@ -36,7 +36,6 @@ router.get("/",function(req,res){
     }
 });
 
-
 //NEW FORM
 router.get("/new", isLoggedIn, function(req,res){
   res.render("campgrounds/new"); 
@@ -104,9 +103,8 @@ router.get("/:id", function(req, res) {
     });
 });
 
-// isLoggedIn, checkUserCampground,
 //EDIT FORM
-router.get("/:id/edit",  function(req,res){
+router.get("/:id/edit", isLoggedIn, checkUserCampground, function(req,res){
    Campground.findById(req.params.id).populate("costs").exec(function(err, foundCampground){
        if ( err || !foundCampground){
            req.flash("error", "Sorry, campground doesn't exist");
@@ -118,7 +116,7 @@ router.get("/:id/edit",  function(req,res){
 });
 
 //UPDATE 
-router.put("/:id",  function(req,res){
+router.put("/:id", isLoggedIn, checkUserCampground, function(req,res){
     geocoder.geocode(req.body.campground.location, function (err, data) {
         if (err || data.status === 'ZERO_RESULTS') {
           req.flash('error', 'Invalid address');
