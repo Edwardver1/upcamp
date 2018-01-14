@@ -135,6 +135,7 @@ $(function() {
         `);
 
         $('#removeCost').removeClass('hidden');
+        $(this).blur();
     });
     
      $('#removeCost').click(function(e){
