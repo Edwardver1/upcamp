@@ -46,7 +46,7 @@
           <div >
             <h4 class="fees-title" >Fees</h4>
             <% campground.costs.forEach(function(cost){ %>
-              <p class="fees"><%= cost.season %>  -  <span><%= cost.price %></span></p>
+              <p class="fees"><%= cost.season %>  -  <span>$<%= cost.price %>/night</span></p>
             <% }) %>
           </div>
           <p class="align-right">
