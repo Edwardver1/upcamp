@@ -7,13 +7,21 @@ $(function() {
         e.preventDefault();
         var $arr = $("#imgs-group").find("div.col-md-5.col-sm-5");
         var $div = $(this).parent().parent();
-        // handle remove first image issue
+        var $divLogo = $("#imgs-group").find('div.col-md-5.col-sm-5.col-logo');
+        // handle remove first image issue with > 2 available
         if($arr.length > 2 && ($arr.get().indexOf($div.get(0)) === 0)){
             var $logoUrl = $("#imgs-group").find("div.col-md-5.col-sm-5:first-child").find('input').attr('value');
             var $nextToLogoUrl = $("#imgs-group").find("div.col-md-5.col-sm-5:nth-child(2)").find('input').attr('value');
-            $div.remove();
-            $("#imgs-group").find("div.col-md-5.col-sm-5:first-child").find('input').attr('value',$logoUrl);
-            $("#imgs-group").find('div.col-md-5.col-sm-5.col-logo').find('input').attr('value',$nextToLogoUrl);
+            if($arr.get().indexOf($divLogo.get()[0]) === 1){ // logo 2 image 
+                // switching them
+                $("#imgs-group").find("div.col-md-5.col-sm-5:first-child").find('input').attr('value', $nextToLogoUrl);
+                $("#imgs-group").find("div.col-md-5.col-sm-5:nth-child(2)").find('input').attr('value',$logoUrl);
+                $div.remove();
+            } else { // logo > 2 image
+                $div.remove();
+                $("#imgs-group").find("div.col-md-5.col-sm-5:first-child").find('input').attr('value',$logoUrl);
+                $("#imgs-group").find('div.col-md-5.col-sm-5.col-logo').find('input').attr('value',$nextToLogoUrl); 
+            }
         } else if ($arr.length = 2 && ($arr.get().indexOf($div.get(0)) === 0)) {
             var $logoUrl = $("#imgs-group").find("div.col-md-5.col-sm-5:first-child").find('input').attr('value');
             $div.siblings('div.col-logo').find('input').attr('value',$logoUrl);
