@@ -73,6 +73,22 @@ body {
     color: #337ab7;
 }
 
+#forgot-navbar {
+    margin-top: 7px;
+    color: #337ab7;
+    font-size: 13px;
+}
+
+#forgot-navbar:hover {
+   color:grey;
+   background-color: white;
+   
+}
+
+.dropdown-menu>li>a {
+    padding: 0;
+}
+
 
 /* Campground show */
 
