@@ -38,7 +38,7 @@ module.exports = {
         res.redirect('/campgrounds');
       } else {
         if(foundUser[0].isEnabled === false){
-          req.flash('error', 'Oops, you are disabled!');
+          req.flash('error', 'Oops, you have been blocked!');
           res.redirect('/campgrounds');
         } else {
           next()

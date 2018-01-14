@@ -105,7 +105,7 @@ router.get("/forgot", function(req, res) {
   res.render("auth/forgot");
 });
 
-router.post("/forgot", function(req, res, next) {
+router.post("/forgot", isEnabled, function(req, res, next) {
   async.waterfall([
     function(done) {
       crypto.randomBytes(20, function(err, buf) {
