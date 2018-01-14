@@ -33,8 +33,8 @@ module.exports = {
   },
   isEnabled: function(req,res,next){
     User.find({email: req.body.email},function(err,foundUser){
-      if(err){
-        req.flash('error', 'Oops, can\'t find User with such email!');
+      if(err || foundUser[0] == null){
+        req.flash('error', 'Oops, no user with such email exists!');
         res.redirect('/campgrounds');
       } else {
         if(foundUser[0].isEnabled === false){
