@@ -50,7 +50,11 @@
             <% }) %>
           </div>
           <p class="align-right">
+            <% if (campground.adminEdited === true) { %>
+            <em>Edited by: Admin, <%= moment(campground.createdAt).fromNow() %></em>
+            <% } else { %>
             <em>Submitted by: <%= campground.author.username %>, <%= moment(campground.createdAt).fromNow() %></em>
+            <% } %>
           </p>
           <% if(currentUser && currentUser._id.equals(campground.author.id) || currentUser && currentUser.isAdmin){ %>
           <a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>

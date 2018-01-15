@@ -130,6 +130,12 @@ router.put("/:id", isLoggedIn, checkUserCampground, function(req,res){
         }else{
             req.flash("error","Something went wrong! Try change location again");
         }
+        if(req.user.isAdmin === true){
+            req.body.campground.adminEdited = true;
+        } else {
+            req.body.campground.adminEdited = false;
+        }
+        req.body.campground.createdAt = Date.now();
         req.body.campground.images = [];
         req.body.campground.images = req.body.campground.images.concat(req.body.urls);
         req.body.campground.description = req.sanitize(req.body.campground.description);
@@ -138,7 +144,7 @@ router.put("/:id", isLoggedIn, checkUserCampground, function(req,res){
                 req.flash("error", err.message);
                 return res.redirect("back");
             } else {
-                //updating exists 
+                //updating exists costs
                 // if 1
                 if( typeof req.body.price._id === 'string' && typeof req.body.price.season === 'string'){
                  Price.findByIdAndUpdate(req.body.price._id, {$set: {season: req.body.price.season, price: req.body.price.cost}}, function(err,updatedPrice){
@@ -150,7 +156,7 @@ router.put("/:id", isLoggedIn, checkUserCampground, function(req,res){
                         }  
                     })
                 }
-                // if exists > 1
+                // if exists > 1 cost
                 if(Array.isArray(req.body.price._id) && req.body.price._id.length > 1 ){
                     for(var i = 0; i < req.body.price._id.length; i++){
                         var price = {season: req.body.price.season[i], price: req.body.price.cost[i]};
@@ -164,7 +170,7 @@ router.put("/:id", isLoggedIn, checkUserCampground, function(req,res){
                         })
                     }
                 }
-                //creating new 
+                //creating new cost
                 if(req.body.price.new){
                     // if camp has 1 or > 1 costs
                   var start = typeof req.body.price._id === 'string' ? 1 : req.body.price._id.length;
