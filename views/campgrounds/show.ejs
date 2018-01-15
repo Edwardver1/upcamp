@@ -102,6 +102,9 @@
                 </form>
               </div>
             <% } %>
+            <% if ( !(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) && comment.adminEdited === true ) { %>
+            <small class="pull-right">Edited By Admin</small>
+            <% } %>
             <hr>
           </div>
         </div>

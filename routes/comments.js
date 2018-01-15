@@ -50,6 +50,11 @@ router.get("/:commentId/edit", isLoggedIn,  function(req, res){
 
 router.put("/:commentId",  function(req, res){
    req.body.comment.createdAt = Date.now();
+    if(req.user.isAdmin === true){
+        req.body.comment.adminEdited = true;
+    } else {
+        req.body.comment.adminEdited = false;
+    }
    Comment.findByIdAndUpdate(req.params.commentId, req.body.comment, {new: true}, function(err, comment){
        if(err){
           console.log(err);
