@@ -85,6 +85,15 @@ body {
    
 }
 
+#fb-navbar: {
+    position: relative;
+    background-color: black;
+}
+
+#bla{
+    padding-left: 60px;
+}
+
 /* Campground show */
 
 .campground-center {

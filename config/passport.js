@@ -23,49 +23,37 @@ passport.use(new FacebookStrategy({
     callbackURL: process.env.FACEBOOK_CALLBACK_URL
   },
   function(accessToken, refreshToken, profile, done) {
-        // check user table for anyone with a facebook ID of profile.id
-        User.findOne({
-            'facebook.id': profile.id 
-        }, function(err, user) {
-            if (err) {
-                return done(err);
-            }
-                if (user) {
-                    return done(null, user); 
-                } else {
-                    // if email exists in db
-                    User.findOne({email: profile.emails[0].value},function(err,foundUser){
-                        if (!err && foundUser){
-                            return done(err);
-                        }
-                        user = new User({
-                            email: profile.emails[0].value, 
-                            username: profile.emails[0].value.substring(0, profile.emails[0].value.lastIndexOf("@"))
-                            
-                        });
-                        var password = crypto.randomBytes(4).toString('hex');
-                        User.register(user,password, function(err,newUser) {
-                        if (err) throw err;
-                           
-                            var authenticationURL = process.env.HOSTNAME + "/verify?authToken=" + newUser.authToken;
-                              var msg = {
-                                  to: newUser.email,
-                                  from: "upcampinc@gmail.com",
-                                  subject: "Welcome to UpCamp! ",
-                                  html: "<p>Thanks for joining UpCamp. You're almost ready to start.</p> " +
-                                        "<p>Please notice your default password: <strong>" + password + "</strong><p>" +
-                                        "<p>Please click on the following link, or paste this into your browser to complete the registration process:</p>" +
-                                        "<p>" + authenticationURL + "</p>" +
-                                        "<p>If you did not request this, please ignore this email.</p>"
-                              };
-                            sgMail.send(msg,function(err){
-                                if(!err) return done(null, newUser);
-                            });
-                        });
-                    });
-                }
+    User.findOne({email: profile.emails[0].value},function(err,foundUser){
+        if (!err && foundUser){
+            return done(null,foundUser,{ message: 'Nice to see you again ' + foundUser.username + " !" });
+        }
+        var user = ({
+            email: profile.emails[0].value, 
+            username: profile.emails[0].value.substring(0, profile.emails[0].value.lastIndexOf("@")),
+            isEnabled: true
         });
-    }
+        var password = crypto.randomBytes(4).toString('hex');
+        User.register(user,password, function(err,newUser) {
+        if (err) throw err;
+            User.findByIdAndUpdate(newUser._id,{ $set: { isAuthenticated: true }}, { new: true }, function(err,updatedUser){
+                if (!err){
+                    var authenticationURL = process.env.HOSTNAME + "/verify?authToken=" + newUser.authToken;
+                      var msg = {
+                          to: newUser.email,
+                          from: "upcampinc@gmail.com",
+                          subject: "Welcome to UpCamp! ",
+                          html: "<p>Thanks for joining UpCamp.</p> " +
+                                "<p>Please notice your default password: <strong>" + password + "</strong><p>" +
+                                "<p>If you did not request this, please ignore this email.</p>"
+                      };
+                    sgMail.send(msg,function(err){
+                        if(!err) return done(null, updatedUser, { message: 'Welcome to Upcamp!' });
+                    });
+                } 
+            });
+        });
+    });
+  }
 ));
 
 

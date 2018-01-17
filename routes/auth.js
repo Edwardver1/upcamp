@@ -70,8 +70,8 @@ router.get('/login/facebook/callback',
 	passport.authenticate('facebook', {
 		successRedirect : '/campgrounds',
 		failureRedirect : '/register',
-		failureFlash: "User already exists with such email",
-    successFlash: "Email verification sent!"
+		failureFlash: true,
+    successFlash: true
 	}));
 
 
