@@ -23,6 +23,9 @@ passport.use(new FacebookStrategy({
     callbackURL: process.env.FACEBOOK_CALLBACK_URL
   },
   function(accessToken, refreshToken, profile, done) {
+    if(profile.emails == null){
+        return done(null, false, { message: 'You don\'t have valid email in you Facebook account. Sign up locally.' });
+    }
     User.findOne({email: profile.emails[0].value},function(err,foundUser){
         if (!err && foundUser){
             return done(null,foundUser,{ message: 'Nice to see you again ' + foundUser.username + " !" });

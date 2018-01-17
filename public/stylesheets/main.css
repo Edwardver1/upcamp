@@ -85,12 +85,7 @@ body {
    
 }
 
-#fb-navbar: {
-    position: relative;
-    background-color: black;
-}
-
-#bla{
+#fb-navbar{
     padding-left: 60px;
 }
 
