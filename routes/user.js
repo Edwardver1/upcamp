@@ -27,7 +27,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-router.get("/:id", isLoggedIn,  function(req,res){
+router.get("/:id",   function(req,res){
     User.findById(req.params.id, function(err, foundUser){
         if(err){
             req.flash("error", err.message);

@@ -30,12 +30,33 @@ body {
 }
 
 #settings-avatar {
-    max-width: 180px;
+    width: 200px;
+    height: 250px;
 }
 
-.img-round{
-    
+#image-avatar-update {
+    display: none;
 }
+
+#avatar-header {
+    font-size: 22px;
+    color: #808080d9;
+}
+
+#select-avatar-btn {
+    margin-top: 3%;
+    width: 8em;
+}
+
+.settings-img-group {
+    width: 40%;
+}
+
+#updateUser-btn {
+    font-size: 13px;
+    width: 10em;
+}
+
 
 
 /* Thumbnail styles
