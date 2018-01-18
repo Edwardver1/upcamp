@@ -20,7 +20,8 @@ var User = new mongoose.Schema({
 User.plugin(passportLocalMongooseEmail,{
   usernameField: "email",
   incorrectUsernameError: "Incorrect email",
-  userExistsError: "User already exists with email %s"
+  userExistsError: "User already exists with email %s",
+  userEmailUnverifiedError: 'User did not verify email! Try forgot password option.'
 });
 
 
