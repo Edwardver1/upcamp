@@ -4,15 +4,16 @@
     <div cl></div>
     <h3>Account Settings</h3>
     <hr>
-    
     <div class="col-md-6">
-        <img src="../img/profile.png" id="settings-avatar" class="img-circle" alt="User Avatar">
-        <!--<img src="http://vvcexpl.com/wordpress/wp-content/uploads/2013/09/profile-default-male.png" id="settings-avatar" class="img-circle" alt="User Avatar">-->
-    </div>
-    <div class="col-md-6">
+        <img src="<%= user.avatar %>" id="settings-avatar" class="img-circle" alt="User Avatar">
         
     </div>
-    
+    <div class="col-md-6">
+        <form id="avatar-form" action="/settings/<%=user._id %>/uploadImage?_method=PUT" enctype="multipart/form-data" method="POST">
+        <input id="image-avatar-update" name="avatar" type="file" accept="image/*" />
+        <button>submit</button>
+        </form>
+    </div>
     
 </div>
 
