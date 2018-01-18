@@ -13,8 +13,10 @@ $(function() {
   $('#password').on('input', function(){
     if($(this).val().length === 0 || !$(this).val().trim()){
       $('#passwordConfirm').prop('required',false);
+      $('#currentPassword').prop('required',false);
     } else {
       $('#passwordConfirm').prop('required',true);
+      $('#currentPassword').prop('required',true);
     }
   })
   

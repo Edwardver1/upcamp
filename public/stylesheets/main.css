@@ -57,6 +57,13 @@ body {
     width: 10em;
 }
 
+.form-group .inline-password {
+    width: 100%;
+}
+
+.help-block .help-inline-password {
+    color: #737373;
+}
 
 
 /* Thumbnail styles
