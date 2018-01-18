@@ -4,27 +4,27 @@
     <div class="col-md-12">
         <h3>Account Settings</h3>
         <hr>
-        <form id="avatar-form"  action="/settings/ds>/uploadImage?_method=PUT" enctype="multipart/form-data" method="POST" data-toggle="validator">
+        <form id="avatar-form"  action="/settings/<%= user._id %>?_method=PUT" enctype="multipart/form-data" method="POST" data-toggle="validator">
         <div class="form-group settings-img-group">
-            <img src="https://res.cloudinary.com/upcampinc/image/upload/v1516265803/iefj4iojzbadoeuwlntw.png" id="settings-avatar" class="img-circle" alt="User Avatar">
+            <img src="<%= user.avatar %>" id="settings-avatar" class="img-circle" alt="User Avatar">
             <div class="pull-right">
                 <p id="avatar-header">Your Profile Photo</p>
-                <input id="image-avatar-update" name="user[avatar]" type="file" accept="image/*"/>
+                <input id="image-avatar-update" name="avatar" type="file" accept="image/*"/>
                 <button id="select-avatar-btn" type="button" class="btn btn-default">Select File</button>
             </div>
         </div>
         <hr>
         <div class="form-group">
             <label for="username">Username</label>
-            <input class="form-control" type="text" name="user[username]" id="username" value="Ed">
+            <input class="form-control" type="text" name="username" id="username" value="<%= user.username %>">
         </div>
         <div class="form-group">
-            <label for="username">Password</label>
-            <input class="form-control" type="password" name="user[password]" id="password" value="123">
+            <label for="username">New Password</label>
+            <input class="form-control" type="password" name="password" id="password">
         </div>
         <div class="form-group">
             <label for="passwordConfirm">Confirm Password</label>
-            <input class="form-control" type="password"  id="passwordConfirm" data-match="#password" data-match-error="Whoops, passwords don't match" value="123" required>
+            <input class="form-control" type="password"  id="passwordConfirm" data-match="#password" data-match-error="Whoops, passwords don't match">
             <div class="help-block with-errors"></div>
         </div>
         <hr>

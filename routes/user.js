@@ -2,7 +2,8 @@ var express = require("express"),
     router  = express.Router(),
     middleware = require("../middleware"),
     User = require("../models/user"),
-    multer = require('multer');
+    multer = require('multer'),
+    Promise   = require("bluebird");
     
 var { isLoggedIn } = middleware; // destructuring assignment
 
@@ -27,7 +28,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-router.get("/:id",   function(req,res){
+router.get("/:id", isLoggedIn, function(req,res){
     User.findById(req.params.id, function(err, foundUser){
         if(err){
             req.flash("error", err.message);
@@ -35,21 +36,55 @@ router.get("/:id",   function(req,res){
         }
         res.render("./users/settings",{user: foundUser});
     });
-        // res.render("./users/settings");
 })
 
-router.put("/:id/uploadImage", isLoggedIn, upload.single('avatar'), function(req,res){
-    cloudinary.uploader.upload(req.file.path, function(result) {
-        req.body.avatar = result.secure_url;
-        User.findByIdAndUpdate(req.params.id, {$set: {'avatar' : req.body.avatar }}, {new: true}, function(err, updatedUser){
-            if(err){
-                req.flash("error", err.message);
-                res.redirect("/campgrounds");
+router.put("/:id", isLoggedIn, upload.single('avatar'), function(req,res){
+    var promises = [];
+    if(req.file){
+    promises.push(
+        cloudinary.uploader.upload(req.file.path, function(result) {
+            return result;
+        })
+    )
+    }
+    Promise.all(promises).then(function(results){
+        User.findById(req.params.id, function(err, foundUser){
+            if(!err && foundUser){
+                foundUser.username = req.body.username;
+                // check new image provided
+                if(results.length > 0){
+                    foundUser.avatar = results[0].secure_url;
+                }
+                // check password provided
+                if (req.body.password.length === 0 || req.body.password.trim()){
+                    foundUser.setPassword(req.body.password, function(err){
+                        if(!err){
+                            foundUser.isAuthenticated = true;
+                            foundUser.save(function(err){
+                                if(err){
+                                    req.flash('error', err.message);
+                                    return res.redirect("/settings/"+foundUser._id);
+                                } else {
+                                    req.flash('success', 'Account successfully updated!');
+                                    return res.redirect("/settings/"+foundUser._id);
+                                }
+                            });
+                        };
+                    });
+                };
+                foundUser.save(function(err){
+                    if(err){
+                        req.flash('error', err.message);
+                        return res.redirect("/settings/"+foundUser._id);
+                    } else {
+                        req.flash('success', 'Account successfully updated!');
+                        return res.redirect("/settings/"+foundUser._id);
+                    }
+                });
             }
-            res.redirect("/settings/"+updatedUser._id);
-        });
+        })
     });
-})
+});
 
 
 module.exports = router;
