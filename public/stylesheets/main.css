@@ -94,6 +94,14 @@ body {
     margin: 25px auto; 
 }
 
+/* Login Form styles
+-------------------------------------------------- */
+
+#navbar-avatar {
+    width: 27px;
+    height: 27px;
+}
+
 /* DropDown menu
 -------------------------------------------------- */
 .dropdown-login{
