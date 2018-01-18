@@ -3,6 +3,7 @@ var express = require("express"),
     middleware = require("../middleware"),
     Campground = require("../models/campground"),
     Price = require("../models/price"),
+    Promise = require("bluebird"),
     geocoder = require('geocoder');
     
 var { isLoggedIn, checkUserCampground, isAdmin } = middleware; // destructuring assignment
@@ -68,9 +69,9 @@ router.post("/", isLoggedIn, function(req,res){
                 req.flash('error', err.message);
                 return res.redirect('back');
             }else {
-                //add season costs to camp
-                for(var i = 0; i < req.body.price.season.length; i++){
-                    var price = {season: req.body.price.season[i], price: req.body.price.cost[i], campground: campground};
+                //if 1
+                if(typeof req.body.price.season === 'string'){
+                    var price = {season: req.body.price.season, price: req.body.price.cost, campground: campground};
                     Price.create(price,function(err,newPrice){
                         if(err){
                             req.flash('error', err.message);
@@ -84,6 +85,25 @@ router.post("/", isLoggedIn, function(req,res){
                             })
                         }
                     })
+                }
+                // if > 1
+                if(Array.isArray(req.body.price.season)){
+                    for(var i = 0; i < req.body.price.season.length; i++){
+                        var price = {season: req.body.price.season[i], price: req.body.price.cost[i], campground: campground};
+                        Price.create(price,function(err,newPrice){
+                            if(err){
+                                req.flash('error', err.message);
+                                res.redirect('/campgrounds/' + campground._id);
+                            } else {
+                                Campground.findById(campground._id,function(err, foundCampground) {
+                                    if(!err && foundCampground){
+                                        foundCampground.costs.push(newPrice);
+                                        foundCampground.save();
+                                    }
+                                })
+                            }
+                        })
+                    }
                 }
                 res.redirect('/campgrounds/' + campground._id);
              }
