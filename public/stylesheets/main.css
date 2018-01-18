@@ -8,6 +8,7 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -21,7 +22,24 @@ body {
   margin: 20px 0;
 }
 
-/* Thumbnail styles */
+/* User settings
+-------------------------------------------------- */
+
+.settings-row {
+    margin-top: -20px;
+}
+
+#settings-avatar {
+    max-width: 180px;
+}
+
+.img-round{
+    
+}
+
+
+/* Thumbnail styles
+-------------------------------------------------- */
 .thumbnail img {
     width: 100%;
 }
@@ -34,25 +52,29 @@ body {
     padding: 9px;
 }
 
-/* Google Map styles */
+/* Google map styles
+-------------------------------------------------- */
 #map {
 	height: 400px;
 	width: 100%;
 }
 
-/* Index container */
+/* Index container styles
+-------------------------------------------------- */
 .flex-wrap {
   display:flex;
   flex-wrap: wrap;
 }
 
-/* Login form */
+/* Login Form styles
+-------------------------------------------------- */
 .form-center{
     width:30%;
     margin: 25px auto; 
 }
 
-/* Dropdown menu navbar */
+/* DropDown menu
+-------------------------------------------------- */
 .dropdown-login{
     width: 350%;
     padding: 15px ;
@@ -89,7 +111,8 @@ body {
     padding-left: 60px;
 }
 
-/* Campground show */
+/* Campground show styles
+-------------------------------------------------- */
 
 .campground-center {
     width: 80%;
@@ -113,7 +136,8 @@ body {
     width: 7%;
 }
 
-/* Hide comment edit forms on page load */
+/* Hide comment edit forms on page load
+-------------------------------------------------- */
 
 .edit-item-form {
 	display: none;
@@ -126,7 +150,9 @@ body {
     margin-top: -4%;
 }
 
-/* Remove buttons outline */
+/* Remove buttons outline
+-------------------------------------------------- */
+
 .btn:focus, .btn:active:focus, .btn.active:focus {
     outline: 0 none;
 }
@@ -140,7 +166,8 @@ body {
     display: none;
 }
 
-/*----- CREATE/EDIT campground -------*/
+/* CREATE/EDIT campground styles
+-------------------------------------------------- */
 
 .removeIcon {
     position: absolute;
@@ -214,7 +241,8 @@ body {
     margin-bottom: 10px;
 }
 
-/*----- Show campground -------*/
+/* Show campground styles
+-------------------------------------------------- */
 
 .camp-title {
     color: #337ab7;

@@ -19,7 +19,8 @@ var indexRoutes      = require("./routes/index"),
     campgroundRoutes = require("./routes/campgrounds"),
     commentRoutes    = require("./routes/comments"),
     priceRoutes      = require("./routes/price"),
-    adminRoutes       = require("./routes/admin");
+    adminRoutes      = require("./routes/admin"),
+    userRoutes       = require("./routes/user");
 
 mongoose.connect(dburl,{useMongoClient: true});
 mongoose.Promise = global.Promise;
@@ -34,7 +35,7 @@ app.use('/node_modules', express.static(__dirname + '/node_modules'));
 app.use(methodOverride("_method"));
 app.use(flash());
 app.locals.moment = require('moment');
-// seedDB();
+seedDB();
 
 //Auth config
 app.use(require("express-session")({
@@ -61,6 +62,7 @@ app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 app.use("/campgrounds/:id/costs", priceRoutes);
 app.use("/admin/users", adminRoutes);
+app.use("/settings", userRoutes);
 
 
 

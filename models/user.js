@@ -7,6 +7,7 @@ var User = new mongoose.Schema({
   email: {type:String, unique: true, required: true},
   username: {type:String, unique: true},
   password: String,
+  avatar: {type:String, default: "https://res.cloudinary.com/upcampinc/image/upload/v1516263995/profile_rodvmi.png"},
   authToken: String,
   isAuthenticated: {type:Boolean, default: false},
   isEnabled: {type:Boolean, default: true},

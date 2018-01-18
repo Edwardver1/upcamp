@@ -83,8 +83,7 @@
                                <%= currentUser.username %> <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                             <!--<li><a href="#">Settings</a></li>-->
-                             <li><a href="/campgrounds">Camps</a></li>
+                             <li><a href="/settings/<%= currentUser._id %>">Settings</a></li>
                              <li role="separator" class="divider"></li>
                              <li><a href="/logout">Logout</a></li>
                             </ul>
