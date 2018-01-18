@@ -58,7 +58,7 @@ router.put("/:id", isLoggedIn, upload.single('avatar'), function(req,res){
                     foundUser.avatar = results[0].secure_url;
                 }
                 // check password provided
-                if (req.body.password.length === 0 || req.body.password.trim()){
+                if (req.body.password.length !== 0){
                     // check current provided === user's password
                     crypto.pbkdf2(req.body.currentPassword, foundUser.salt, 25000, 512, 'SHA1', function(err, hashRaw) {
                         if (err) {
@@ -80,16 +80,14 @@ router.put("/:id", isLoggedIn, upload.single('avatar'), function(req,res){
                                             return res.redirect("/settings/"+foundUser._id);
                                         }
                                     });
-                                    
                                 };
                             });
                         } else {
                             req.flash('error', 'Incorrect current password! Try again!');
                             return res.redirect("/settings/"+foundUser._id);
                         }
-                    });
-                } 
-                else {
+                    })
+                } else {
                     foundUser.save(function(err){
                         if(err){
                             req.flash('error', err.message);
@@ -98,7 +96,7 @@ router.put("/:id", isLoggedIn, upload.single('avatar'), function(req,res){
                             req.flash('success', 'Account successfully updated!');
                             return res.redirect("/settings/"+foundUser._id);
                         }
-                    });   
+                    });
                 }
             }
         })
