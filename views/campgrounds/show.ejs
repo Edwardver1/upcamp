@@ -82,6 +82,9 @@
         <% campground.comments.forEach(function(comment){ %>
         <div class="row">
           <div class="col-md-12">
+            <div class="pull-left">
+            <img src="<%= comment.author.avatar %>" class="img-circle img-comment" >
+            </div>
             <strong><%= comment.author.username %></strong>
             <span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
             <div>

@@ -76,6 +76,8 @@ function getID(){
 
 function createComment(data){
 	var $colmd12 = $('<div>',{class: "col-md-12"});
+	var $divPullLeft = $('<div>',{class: "pull-left"});
+	var $avatar = $('<img>',{class: "img-circle img-comment", src: data.author.avatar});
 	var $strong = $('<strong>', {text: data.author.username});
     var $time = $('<span>',{class: 'pull-right', text: moment(data.createdAt).fromNow()})
 	var $divText = $('<div>');
@@ -91,6 +93,8 @@ function createComment(data){
 	var $delButton = $('<button>', {class: 'btn btn-xs btn-danger', text: 'DELETE'});
 	var $hr = $('<hr>');
 	
+	$divPullLeft.append($avatar);
+	
 	$divFormGroup1.append($inputUpdate);
 	$divFormGroup2.append($submitButton);
 	$updateForm.append($divFormGroup1);
@@ -105,6 +109,7 @@ function createComment(data){
 	$divText.append($divButtons);
 	$divText.append($hr);
 	
+	$colmd12.append($divPullLeft);
 	$colmd12.append($strong);
 	$colmd12.append($time);
 	$colmd12.append($divText);

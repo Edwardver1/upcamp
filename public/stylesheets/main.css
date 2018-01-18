@@ -165,11 +165,18 @@ body {
     width: 7%;
 }
 
+.img-comment {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
 /* Hide comment edit forms on page load
 -------------------------------------------------- */
 
 .edit-item-form {
 	display: none;
+	margin-left: 60px;
 }
 .cancel-button {
 	display: none;
