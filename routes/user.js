@@ -69,18 +69,20 @@ router.put("/:id", isLoggedIn, upload.single('avatar'), function(req,res){
                                     return res.redirect("/settings/"+foundUser._id);
                                 }
                             });
+                            
                         };
                     });
-                };
-                foundUser.save(function(err){
-                    if(err){
-                        req.flash('error', err.message);
-                        return res.redirect("/settings/"+foundUser._id);
-                    } else {
-                        req.flash('success', 'Account successfully updated!');
-                        return res.redirect("/settings/"+foundUser._id);
-                    }
-                });
+                } else {
+                    foundUser.save(function(err){
+                        if(err){
+                            req.flash('error', err.message);
+                            return res.redirect("/settings/"+foundUser._id);
+                        } else {
+                            req.flash('success', 'Account successfully updated!');
+                            return res.redirect("/settings/"+foundUser._id);
+                        }
+                    });   
+                }
             }
         })
     });
