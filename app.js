@@ -35,7 +35,7 @@ app.use('/node_modules', express.static(__dirname + '/node_modules'));
 app.use(methodOverride("_method"));
 app.use(flash());
 app.locals.moment = require('moment');
-// seedDB();
+seedDB();
 
 //Auth config
 app.use(require("express-session")({
