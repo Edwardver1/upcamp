@@ -3,7 +3,8 @@ var express = require("express"),
     middleware = require("../middleware"),
     User = require("../models/user"),
     multer = require('multer'),
-    Promise   = require("bluebird");
+    Promise   = require("bluebird"),
+    crypto = require('crypto');
     
 var { isLoggedIn } = middleware; // destructuring assignment
 
@@ -36,10 +37,11 @@ router.get("/:id", isLoggedIn, function(req,res){
         }
         res.render("./users/settings",{user: foundUser});
     });
-})
+});
 
 router.put("/:id", isLoggedIn, upload.single('avatar'), function(req,res){
     var promises = [];
+    // upload image if provided
     if(req.file){
     promises.push(
         cloudinary.uploader.upload(req.file.path, function(result) {
@@ -57,22 +59,37 @@ router.put("/:id", isLoggedIn, upload.single('avatar'), function(req,res){
                 }
                 // check password provided
                 if (req.body.password.length === 0 || req.body.password.trim()){
-                    foundUser.setPassword(req.body.password, function(err){
-                        if(!err){
-                            foundUser.isAuthenticated = true;
-                            foundUser.save(function(err){
-                                if(err){
-                                    req.flash('error', err.message);
-                                    return res.redirect("/settings/"+foundUser._id);
-                                } else {
-                                    req.flash('success', 'Account successfully updated!');
-                                    return res.redirect("/settings/"+foundUser._id);
-                                }
+                    // check current provided === user's password
+                    crypto.pbkdf2(req.body.currentPassword, foundUser.salt, 25000, 512, 'SHA1', function(err, hashRaw) {
+                        if (err) {
+                            req.flash('error', err.message);
+                            return res.redirect("/settings/"+foundUser._id);
+                        }
+                        var hash = new Buffer(hashRaw, 'binary').toString('hex');
+            
+                        if (hash === foundUser.hash) {
+                            foundUser.setPassword(req.body.password, function(err){
+                                if(!err){
+                                    foundUser.isAuthenticated = true;
+                                    foundUser.save(function(err){
+                                        if(err){
+                                            req.flash('error', err.message);
+                                            return res.redirect("/settings/"+foundUser._id);
+                                        } else {
+                                            req.flash('success', 'Account successfully updated!');
+                                            return res.redirect("/settings/"+foundUser._id);
+                                        }
+                                    });
+                                    
+                                };
                             });
-                            
-                        };
+                        } else {
+                            req.flash('error', 'Incorrect current password! Try again!');
+                            return res.redirect("/settings/"+foundUser._id);
+                        }
                     });
-                } else {
+                } 
+                else {
                     foundUser.save(function(err){
                         if(err){
                             req.flash('error', err.message);
