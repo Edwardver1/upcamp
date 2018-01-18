@@ -19,7 +19,7 @@ var indexRoutes      = require("./routes/index"),
     campgroundRoutes = require("./routes/campgrounds"),
     commentRoutes    = require("./routes/comments"),
     priceRoutes      = require("./routes/price"),
-    userRoutes       = require("./routes/user");
+    adminRoutes       = require("./routes/admin");
 
 mongoose.connect(dburl,{useMongoClient: true});
 mongoose.Promise = global.Promise;
@@ -60,7 +60,7 @@ app.use("/",authRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 app.use("/campgrounds/:id/costs", priceRoutes);
-app.use("/admin/users", userRoutes);
+app.use("/admin/users", adminRoutes);
 
 
 

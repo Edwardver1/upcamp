@@ -40,7 +40,7 @@ router.put("/:id",isLoggedIn, isAdmin, function(req, res){
   User.findByIdAndUpdate(req.params.id, req.body.user, {new: true}, function(err, user){
       if(err){
           console.log(err);
-          res.redirect("/admin/user");
+          res.redirect("/admin/users");
       } else {
           res.json(user);
       }
