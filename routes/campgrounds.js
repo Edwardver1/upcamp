@@ -59,10 +59,7 @@ router.post("/", isLoggedIn, function(req,res){
         req.body.campground.images = [];
         req.body.campground.images = req.body.campground.images.concat(req.body.urls);
         // add author to campground
-        req.body.campground.author = {
-          id: req.user._id,
-          username: req.user.username
-        };
+        req.body.campground.author = req.user;
         req.body.campground.description = req.sanitize(req.body.campground.description);
         Campground.create(req.body.campground, function(err, campground) {
             if (err) {
@@ -117,10 +114,10 @@ router.get("/:id", function(req, res) {
     Campground.findById(req.params.id)
     .populate({
         path: 'comments',
-        // Get friends of friends - populate the 'friends' array for every friend
         populate: { path: 'author' }
         
     }).populate("costs")
+    .populate("author") 
     .exec(function(err, foundCampground){
         if(err || !foundCampground){
             req.flash('error', 'Sorry, that campground does not exist!');
