@@ -57,14 +57,16 @@ router.put("/:commentId",  function(req, res){
     } else {
         req.body.comment.adminEdited = false;
     }
-   Comment.findByIdAndUpdate(req.params.commentId, req.body.comment, {new: true}, function(err, comment){
+    Comment.findById(req.params.commentId).populate('author').exec(function(err,foundComment){
        if(err){
           console.log(err);
-           res.render("edit");
-       } else {
-             res.json(comment);
-       }
-   }); 
+          res.render("edit");
+      } else {
+            foundComment.text = req.body.comment.text;
+            foundComment.save();
+            res.json(foundComment);
+      } 
+    });
 });
 
 //DELETE
