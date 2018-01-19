@@ -9,12 +9,12 @@ module.exports = {
       res.redirect('/login');
   },
   checkUserCampground: function(req, res, next){
-    Campground.findById(req.params.id, function(err, foundCampground){
+    Campground.findById(req.params.id).populate("author").exec(function(err, foundCampground){
       if(err || !foundCampground){
           console.log(err);
           req.flash('error', 'Sorry, that campground does not exist!');
           res.redirect('/campgrounds');
-      } else if(foundCampground.author.id.equals(req.user._id) || req.user.isAdmin){
+      } else if(foundCampground.author.equals(req.user) || req.user.isAdmin){
           req.campground = foundCampground;
           next();
       } else {
