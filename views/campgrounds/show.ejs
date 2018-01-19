@@ -85,7 +85,7 @@
             <div class="pull-left">
             <img src="<%= comment.author.avatar %>" class="img-circle img-comment" >
             </div>
-            <strong><%= comment.author.username %></strong>
+            <strong><%=  comment.author.username %></strong>
             <span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
             <div>
              <span class="comment-text"><%= comment.text %> </span>
@@ -97,7 +97,7 @@
                     <button class="btn btn-xs btn-primary">Save</button>
                 </div>
             </form>
-             <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
+             <% if(currentUser && comment.author.equals(currentUser) || currentUser && currentUser.isAdmin){ %>
               <div class="pull-right">
                 <button class="btn btn-xs btn-warning edit-button">EDIT</button>
                 <form class="delete-form" action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>" method="POST">
@@ -105,7 +105,7 @@
                 </form>
               </div>
             <% } %>
-            <% if ( !(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) && comment.adminEdited === true ) { %>
+            <% if ( !(currentUser && comment.author.equals(currentUser) || currentUser && currentUser.isAdmin) && comment.adminEdited === true ) { %>
             <small class="pull-right">Edited By Admin</small>
             <% } %>
             <hr>

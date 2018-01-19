@@ -114,7 +114,14 @@ router.post("/", isLoggedIn, function(req,res){
 //SHOW
 router.get("/:id", function(req, res) {
     //find the campground with provided ID
-    Campground.findById(req.params.id).populate("comments costs").exec(function(err, foundCampground){
+    Campground.findById(req.params.id)
+    .populate({
+        path: 'comments',
+        // Get friends of friends - populate the 'friends' array for every friend
+        populate: { path: 'author' }
+        
+    }).populate("costs")
+    .exec(function(err, foundCampground){
         if(err || !foundCampground){
             req.flash('error', 'Sorry, that campground does not exist!');
             return res.redirect('/campgrounds');
