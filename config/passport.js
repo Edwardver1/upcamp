@@ -27,9 +27,12 @@ passport.use(new FacebookStrategy({
         return done(null, false, { message: 'You don\'t have valid email in you Facebook account. Sign up locally.' });
     }
     User.findOne({email: profile.emails[0].value},function(err,foundUser){
-        if (!err && foundUser){
-            return done(null,foundUser,{ message: 'Nice to see you again ' + foundUser.username + " !" });
+        if(err || foundUser.isEnabled === false){
+            return done(null, false, { message: 'Oops, you have been blocked!' });
         }
+        if (foundUser && foundUser.isEnabled === true){
+            return done(null,foundUser,{ message: 'Nice to see you again ' + foundUser.username + " !" });
+        } 
         var user = ({
             email: profile.emails[0].value, 
             username: profile.emails[0].value.substring(0, profile.emails[0].value.lastIndexOf("@")),
