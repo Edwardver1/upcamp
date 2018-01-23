@@ -22,7 +22,7 @@
                         <input class="form-control const-input" type="text" name="price[season]"  value="<%= campground.costs[i].season %>" required aria-describedby="helpSeason<%=i%>">
                         <span id="helpSeason<%=i%>" class="help-block hidden">Please provide season.</span>
                         <input class="form-control const-input" type="number" name="price[cost]"  value="<%= campground.costs[i].price %>" step="0.01" min="0.01" required aria-describedby="helpCost<%=i%>">
-                        <span id="helpCost<%=i%>" class="help-block hidden">Please provide cost.</span>
+                        <span id="helpCost<%=i%>" class="help-block hidden">Please provide cost. Min 0.01, Max 500</span>
                     </div>    
                     <% } %>
                     <a href="#" id="addCost" class="btn btn-default btn-sm" role="button">Add season</a>

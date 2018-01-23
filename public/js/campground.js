@@ -110,10 +110,12 @@ $(function() {
     $("#submit-btn").click(function(e){
         e.preventDefault();
         var $arr = $("#imgs-group").find("div.col-md-5.col-sm-5");
+        var inputCost = $(this).attr("name") === 'price[cost]';
         var $helpId;
         var hasHelp = 0;
         $(':input[required]').each(function(){
-            if($(this).val() == 0){
+            // check required provided and cost > 500
+            if($(this).val() == 0 || ($(this).attr("name") === 'price[cost]' ? ($(this).val() > 500 ? true : false) : false)){
                 $helpId = $(this).attr('aria-describedby');
                 $('#' + $helpId).removeClass('hidden');
                 $(this).focus();
@@ -122,7 +124,7 @@ $(function() {
                 $("#helpImage").removeClass("hidden");
                 return hasHelp += 1;
             }
-        })
+        });
         if(hasHelp === 0){
             $("#createForm").submit();
         }
@@ -138,7 +140,7 @@ $(function() {
             <input class="form-control const-input" type="text" name="price[season]" placeholder="Season" required aria-describedby="helpSeason${$index}">
             <span id="helpSeason${$index}" class="help-block hidden">Please provide season.</span>
             <input class="form-control const-input" type="number" name="price[cost]" placeholder="9.99" step="0.01" min="0.01" required aria-describedby="helpCost${$index}">
-            <span id="helpCost${$index}" class="help-block hidden">Please provide cost.</span>
+            <span id="helpCost${$index}" class="help-block hidden">Please provide cost. Min 0.01, Max 500</span>
         </div>
         `);
 
